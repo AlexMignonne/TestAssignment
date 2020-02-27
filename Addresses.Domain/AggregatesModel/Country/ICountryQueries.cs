@@ -15,6 +15,7 @@ namespace Addresses.Domain.AggregatesModel.Country
         Task<CountryDomain> GetById(
             string correlationToken,
             int id,
+            bool include,
             CancellationToken token);
 
         Task<CountryDomain> GetByProvinceId(

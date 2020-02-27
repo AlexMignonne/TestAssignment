@@ -2,10 +2,10 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Threading.Tasks;
+using Accounts.Application.Exceptions;
 using Accounts.Domain.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using ApplicationException = Accounts.Application.Exceptions.ApplicationException;
 
 namespace Accounts.Service.Middlewares
 {
@@ -48,7 +48,7 @@ namespace Accounts.Service.Middlewares
             Exception exception)
         {
             if (exception is DomainException ||
-                exception is ApplicationException)
+                exception is AppException)
             {
                 _logger
                     .LogInformation(

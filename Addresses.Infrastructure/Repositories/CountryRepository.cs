@@ -49,7 +49,7 @@ namespace Addresses.Infrastructure.Repositories
                 .Update(country);
         }
 
-        public async Task<bool> Remove(
+        public async Task<CountryDomain?> Remove(
             string correlationToken,
             int id,
             CancellationToken token)
@@ -57,16 +57,17 @@ namespace Addresses.Infrastructure.Repositories
             var countryDomain = await GetById(
                 correlationToken,
                 id,
+                true,
                 token);
 
             if (countryDomain == null!)
-                return false;
+                return null;
 
             _addressesContext
                 .Countries
                 .Remove(countryDomain);
 
-            return true;
+            return countryDomain;
         }
 
         public async Task<IEnumerable<CountryDomain>> GetList(
@@ -96,12 +97,20 @@ namespace Addresses.Infrastructure.Repositories
         public async Task<CountryDomain> GetById(
             string correlationToken,
             int id,
+            bool include,
             CancellationToken token)
         {
-            return await _addressesContext
-                .Countries
-                .FindAsync(
-                    id);
+            return include
+                ? await _addressesContext
+                    .Countries
+                    .Include(_ => _.Provinces)
+                    .SingleOrDefaultAsync(
+                        _ => _.Id == id,
+                        token)
+                : await _addressesContext
+                    .Countries
+                    .FindAsync(
+                        id);
         }
 
         public async Task<CountryDomain> GetByProvinceId(

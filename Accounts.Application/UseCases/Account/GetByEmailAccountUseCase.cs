@@ -5,11 +5,12 @@ using Accounts.Api.DataTransferObjects;
 using Accounts.Application.Exceptions;
 using Accounts.Domain.AggregatesModel.Account;
 using Accounts.Domain.AggregatesModel.Address;
+using Accounts.Domain.Types;
 using Accounts.SharedLibrary.ViewModels;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Accounts.Application.UseCases.Account.GetByEmail
+namespace Accounts.Application.UseCases.Account
 {
     public sealed class GetByEmailAccountUseCase
         : IRequestHandler<
@@ -47,6 +48,16 @@ namespace Accounts.Application.UseCases.Account.GetByEmail
                     request.Email,
                     token);
 
+            if (Equals(
+                accountDomain.AccountStatus,
+                AccountStatusType.AddressVerificationRequired))
+                return new AccountDto(
+                    accountDomain.Id,
+                    (AccountStatusEnum) accountDomain.Id,
+                    accountDomain.Email,
+                    accountDomain.ProvinceId,
+                    null);
+
             var address = await _addressQueries
                 .GetByProvinceId(
                     request.CorrelationToken,
@@ -54,10 +65,10 @@ namespace Accounts.Application.UseCases.Account.GetByEmail
                     token);
 
             if (address == null)
-                throw new ApplicationException(
-                    $"An error has occurred. " +
-                    $"We are working on a solution to it. " +
-                    $"You can find out the status by ticket: " +
+                throw new AppException(
+                    "An error has occurred. " +
+                    "We are working on a solution to it. " +
+                    "You can find out the status by ticket: " +
                     $"{request.CorrelationToken}");
 
             return new AccountDto(

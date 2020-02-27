@@ -1,8 +1,7 @@
-﻿using Accounts.Application.UseCases.Account.GetList;
-using Accounts.Application.UseCases.Account.Register;
+﻿using Accounts.Application.UseCases.Account;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Accounts.Application.Extensions
+namespace Accounts.Application.UseCases.Extensions
 {
     public static class StartupExtension
     {

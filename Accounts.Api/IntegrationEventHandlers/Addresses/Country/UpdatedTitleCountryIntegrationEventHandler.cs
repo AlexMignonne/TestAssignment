@@ -1,28 +1,28 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Addresses.SharedLibrary.IntegrationEvents.Province;
+using Addresses.SharedLibrary.IntegrationEvents.Country;
 using CommonLibrary.RabbitMq;
 using CommonLibrary.RabbitMq.Declare;
 
-namespace Accounts.Service.IntegrationEventHandlers.Addresses.Province
+namespace Accounts.Api.IntegrationEventHandlers.Addresses.Country
 {
-    public sealed class UpdateTitleProvinceIntegrationEventHandler
+    public sealed class UpdatedTitleCountryIntegrationEventHandler
         : RabbitHandler<
-            UpdatedTitleProvinceIntegrationEvent,
-            UpdatedTitleProvinceExchange>
+            UpdatedTitleCountryIntegrationEvent,
+            UpdatedTitleCountryExchange>
     {
-        public UpdateTitleProvinceIntegrationEventHandler(
+        public UpdatedTitleCountryIntegrationEventHandler(
             RabbitEndpointConfiguration endpointConfiguration,
             RabbitExchange exchange)
             : base(
                 endpointConfiguration,
                 exchange,
-                "province_updated_title.account_service")
+                "country_updated_title.account_service")
         {
         }
 
         public override Task Receive(
-            UpdatedTitleProvinceIntegrationEvent message,
+            UpdatedTitleCountryIntegrationEvent message,
             string correlationToken)
         {
             throw new NotImplementedException();

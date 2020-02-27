@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using Accounts.Api;
-using Accounts.Application.Extensions;
+using Accounts.Api.IntegrationEventHandlers.Addresses.Country;
+using Accounts.Api.IntegrationEventHandlers.Addresses.Province;
+using Accounts.Application.UseCases.Extensions;
 using Accounts.Infrastructure.Extensions;
-using Accounts.Service.IntegrationEventHandlers.Addresses.Country;
-using Accounts.Service.IntegrationEventHandlers.Addresses.Province;
 using Accounts.Service.Middlewares;
 using Addresses.SharedLibrary.IntegrationEvents.Country;
 using Addresses.SharedLibrary.IntegrationEvents.Province;
@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StartupExtension = Accounts.Application.UseCases.Extensions.StartupExtension;
 
 namespace Accounts.Service
 {
@@ -38,7 +39,7 @@ namespace Accounts.Service
                 .AddMediatR(
                     GetType()
                         .Assembly,
-                    typeof(Application.Extensions.StartupExtension)
+                    typeof(StartupExtension)
                         .Assembly,
                     typeof(Infrastructure.Extensions.StartupExtension)
                         .Assembly
@@ -69,27 +70,29 @@ namespace Accounts.Service
 
             services
                 .AddSingleton(
-                    new AddCountryIntegrationEventHandler(
+                    new AddedCountryIntegrationEventHandler(
                         rabbitEndpointConfiguration,
                         new AddedCountryExchange()))
                 .AddSingleton(
-                    new RemoveCountryIntegrationEventHandler(
+                    new RemovedCountryIntegrationEventHandler(
                         rabbitEndpointConfiguration,
-                        new RemovedCountryExchange()))
+                        new RemovedCountryExchange(),
+                        services
+                            .BuildServiceProvider()))
                 .AddSingleton(
-                    new UpdateTitleCountryIntegrationEventHandler(
+                    new UpdatedTitleCountryIntegrationEventHandler(
                         rabbitEndpointConfiguration,
                         new UpdatedTitleCountryExchange()))
                 .AddSingleton(
-                    new AddProvinceIntegrationEventHandler(
+                    new AddedProvinceIntegrationEventHandler(
                         rabbitEndpointConfiguration,
                         new AddedProvinceExchange()))
                 .AddSingleton(
-                    new RemoveProvinceIntegrationEventHandler(
+                    new RemovedProvinceIntegrationEventHandler(
                         rabbitEndpointConfiguration,
                         new RemovedProvinceExchange()))
                 .AddSingleton(
-                    new UpdateTitleProvinceIntegrationEventHandler(
+                    new UpdatedTitleProvinceIntegrationEventHandler(
                         rabbitEndpointConfiguration,
                         new UpdatedTitleProvinceExchange()));
         }

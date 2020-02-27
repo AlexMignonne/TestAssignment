@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StartupExtension = Addresses.Application.Extensions.StartupExtension;
 
 namespace Addresses.Service
 {
@@ -36,7 +37,7 @@ namespace Addresses.Service
                 .AddMediatR(
                     GetType()
                         .Assembly,
-                    typeof(Application.Extensions.StartupExtension)
+                    typeof(StartupExtension)
                         .Assembly,
                     typeof(Infrastructure.Extensions.StartupExtension)
                         .Assembly

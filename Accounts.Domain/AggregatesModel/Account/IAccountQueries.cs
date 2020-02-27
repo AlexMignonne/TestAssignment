@@ -22,6 +22,11 @@ namespace Accounts.Domain.AggregatesModel.Account
             string email,
             CancellationToken token);
 
+        Task<IEnumerable<AccountDomain>> GetByProvinceIds(
+            string correlationToken,
+            IEnumerable<int> ids,
+            CancellationToken token);
+
         Task<bool> IsExist(
             string correlationToken,
             int id,

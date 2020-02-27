@@ -8,14 +8,14 @@ using Microsoft.Extensions.Logging;
 
 namespace Addresses.Application.DomainEventHandlers.Province
 {
-    public sealed class AddProvinceDomainEventHandler
-        : INotificationHandler<AddProvinceDomainEvent>
+    public sealed class RemovedProvinceDomainEventHandler
+        : INotificationHandler<RemoveProvinceDomainEvent>
     {
-        private readonly ILogger<AddProvinceDomainEventHandler> _logger;
+        private readonly ILogger<RemovedProvinceDomainEventHandler> _logger;
         private readonly IRabbitPublisher _rabbitPublisher;
 
-        public AddProvinceDomainEventHandler(
-            ILogger<AddProvinceDomainEventHandler> logger,
+        public RemovedProvinceDomainEventHandler(
+            ILogger<RemovedProvinceDomainEventHandler> logger,
             IRabbitPublisher rabbitPublisher)
         {
             _logger = logger;
@@ -23,20 +23,19 @@ namespace Addresses.Application.DomainEventHandlers.Province
         }
 
         public async Task Handle(
-            AddProvinceDomainEvent notification,
+            RemoveProvinceDomainEvent notification,
             CancellationToken token)
         {
-            var addProvinceIntegrationEvent =
-                new AddedProvinceIntegrationEvent(
+            var removeProvinceIntegrationEvent =
+                new RemovedProvinceIntegrationEvent(
                     notification.CorrelationToken,
-                    notification.Province.Id,
-                    notification.Province.Title);
+                    notification.Province.Id);
 
             await _rabbitPublisher
                 .Publish<
-                    AddedProvinceIntegrationEvent,
-                    AddedProvinceExchange>(
-                    addProvinceIntegrationEvent);
+                    RemovedProvinceIntegrationEvent,
+                    RemovedProvinceExchange>(
+                    removeProvinceIntegrationEvent);
         }
     }
 }

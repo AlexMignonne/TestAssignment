@@ -2,20 +2,20 @@
 
 namespace Addresses.Application.Exceptions
 {
-    public sealed class ApplicationException
+    public sealed class AppException
         : Exception
     {
-        internal ApplicationException()
+        internal AppException()
         {
         }
 
-        internal ApplicationException(
+        internal AppException(
             string message)
             : base(message)
         {
         }
 
-        internal ApplicationException(
+        internal AppException(
             string message,
             Exception innerException
         )

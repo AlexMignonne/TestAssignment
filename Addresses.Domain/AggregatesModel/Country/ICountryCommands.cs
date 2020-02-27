@@ -16,7 +16,7 @@ namespace Addresses.Domain.AggregatesModel.Country
             string correlationToken,
             CountryDomain country);
 
-        Task<bool> Remove(
+        Task<CountryDomain?> Remove(
             string correlationToken,
             int id,
             CancellationToken token);

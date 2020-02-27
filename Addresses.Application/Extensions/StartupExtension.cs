@@ -23,12 +23,12 @@ namespace Addresses.Application.Extensions
                 .AddTransient<GetByIdProvinceUseCase>()
                 .AddTransient<RemoveProvinceUseCase>()
                 .AddTransient<UpdateTitleProvinceUseCase>()
-                .AddTransient<AddCountryDomainEventHandler>()
-                .AddTransient<RemoveProvinceDomainEventHandler>()
-                .AddTransient<UpdateTitleCountryDomainEventHandler>()
-                .AddTransient<AddProvinceDomainEventHandler>()
-                .AddTransient<RemoveProvinceDomainEventHandler>()
-                .AddTransient<UpdateTitleProvinceDomainEventHandler>();
+                .AddTransient<AddedCountryDomainEventHandler>()
+                .AddTransient<RemovedProvinceDomainEventHandler>()
+                .AddTransient<UpdatedTitleCountryDomainEventHandler>()
+                .AddTransient<AddedProvinceDomainEventHandler>()
+                .AddTransient<RemovedProvinceDomainEventHandler>()
+                .AddTransient<UpdatedTitleProvinceDomainEventHandler>();
 
             return services;
         }

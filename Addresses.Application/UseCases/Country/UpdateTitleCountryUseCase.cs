@@ -42,6 +42,7 @@ namespace Addresses.Application.UseCases.Country
                 .GetById(
                     request.CorrelationToken,
                     request.Id,
+                    false,
                     token);
 
             countryDomain

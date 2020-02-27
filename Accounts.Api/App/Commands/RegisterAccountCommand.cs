@@ -15,7 +15,7 @@ namespace Accounts.Api.App.Commands
             string email,
             string password,
             int provinceId,
-            bool agree)
+            bool? agree)
             : base(correlationToken)
         {
             AccountStatus = accountStatus;
@@ -29,6 +29,6 @@ namespace Accounts.Api.App.Commands
         public string Email { get; }
         public string Password { get; }
         public int ProvinceId { get; }
-        public bool Agree { get; }
+        public bool? Agree { get; }
     }
 }

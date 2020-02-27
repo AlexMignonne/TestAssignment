@@ -41,17 +41,14 @@ namespace Addresses.Application.UseCases.Country
                     token))
                 return false;
 
-            var countryDomain = await _countryQueries
-                .GetById(
-                    request.CorrelationToken,
-                    request.Id,
-                    token);
-
-            await _countryCommands
+            var countryDomain = await _countryCommands
                 .Remove(
                     request.CorrelationToken,
                     request.Id,
                     token);
+
+            if (countryDomain == null)
+                return false;
 
             await _countryCommands
                 .UnitOfWork

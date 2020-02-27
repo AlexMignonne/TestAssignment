@@ -87,6 +87,18 @@ namespace Accounts.Infrastructure.Repositories
                     token);
         }
 
+        public async Task<IEnumerable<AccountDomain>> GetByProvinceIds(
+            string correlationToken,
+            IEnumerable<int> ids,
+            CancellationToken token)
+        {
+            return await _accountsContext
+                .Accounts
+                .Where(
+                    _ => ids.Contains(_.ProvinceId))
+                .ToListAsync(token);
+        }
+
         public async Task<bool> IsExist(
             string correlationToken,
             int id,

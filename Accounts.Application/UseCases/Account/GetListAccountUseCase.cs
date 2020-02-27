@@ -9,7 +9,7 @@ using Accounts.SharedLibrary.ViewModels;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Accounts.Application.UseCases.Account.GetList
+namespace Accounts.Application.UseCases.Account
 {
     public sealed class GetListAccountUseCase
         : IRequestHandler<

@@ -17,14 +17,14 @@ namespace Accounts.Domain.AggregatesModel.Account
     {
         public AccountDomain(
             string correlationId,
-            bool agree,
+            bool? agree,
             string email,
             string password,
             int provinceId)
         {
             Id = default;
 
-            if (!agree)
+            if (agree == null || !agree.Value)
                 throw new DomainException(
                     "You must accept the terms of the license agreement");
 
@@ -70,5 +70,11 @@ namespace Accounts.Domain.AggregatesModel.Account
         public string Email { get; private set; }
         public string HashPassword { get; private set; }
         public int ProvinceId { get; private set; }
+
+        public void ChangeStatus(
+            AccountStatusType status)
+        {
+            AccountStatus = status;
+        }
     }
 }

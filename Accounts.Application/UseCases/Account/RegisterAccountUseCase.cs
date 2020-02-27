@@ -1,15 +1,15 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Accounts.Api.App.Commands;
 using Accounts.Api.DataTransferObjects;
+using Accounts.Application.Exceptions;
 using Accounts.Domain.AggregatesModel.Account;
 using Accounts.Domain.AggregatesModel.Address;
 using Accounts.SharedLibrary.ViewModels;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Accounts.Application.UseCases.Account.Register
+namespace Accounts.Application.UseCases.Account
 {
     internal class RegisterAccountUseCase
         : IRequestHandler<
@@ -42,7 +42,7 @@ namespace Accounts.Application.UseCases.Account.Register
                     request.CorrelationToken,
                     request.Email,
                     token))
-                throw new ApplicationException(
+                throw new AppException(
                     $"Account on the mail {request.Email} is already registered");
 
             if (!await _addressQueries
@@ -50,7 +50,7 @@ namespace Accounts.Application.UseCases.Account.Register
                     request.CorrelationToken,
                     request.ProvinceId,
                     token))
-                throw new ApplicationException(
+                throw new AppException(
                     $"Province with id {request.ProvinceId} not exist");
 
             var address = await _addressQueries

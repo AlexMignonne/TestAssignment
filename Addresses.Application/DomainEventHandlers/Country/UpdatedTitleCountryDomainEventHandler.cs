@@ -8,14 +8,14 @@ using Microsoft.Extensions.Logging;
 
 namespace Addresses.Application.DomainEventHandlers.Country
 {
-    public sealed class UpdateTitleCountryDomainEventHandler
+    public sealed class UpdatedTitleCountryDomainEventHandler
         : INotificationHandler<UpdateTitleCountryDomainEvent>
     {
-        private readonly ILogger<UpdateTitleCountryDomainEventHandler> _logger;
+        private readonly ILogger<UpdatedTitleCountryDomainEventHandler> _logger;
         private readonly IRabbitPublisher _rabbitPublisher;
 
-        public UpdateTitleCountryDomainEventHandler(
-            ILogger<UpdateTitleCountryDomainEventHandler> logger,
+        public UpdatedTitleCountryDomainEventHandler(
+            ILogger<UpdatedTitleCountryDomainEventHandler> logger,
             IRabbitPublisher rabbitPublisher)
         {
             _logger = logger;

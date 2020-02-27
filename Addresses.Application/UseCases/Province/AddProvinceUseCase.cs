@@ -43,6 +43,7 @@ namespace Addresses.Application.UseCases.Province
                 .GetById(
                     request.CorrelationToken,
                     request.CountryId,
+                    false,
                     token);
 
             var provinceDomain = new ProvinceDomain(

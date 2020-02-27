@@ -49,13 +49,15 @@ namespace Accounts.Api.Controllers
                         AccountStatus = accountDomain
                             .AccountStatus,
                         Email = accountDomain.Email,
-                        Address = new AddressViewModel
-                        {
-                            CountryId = accountDomain.Address.CountryId,
-                            CountryTitle = accountDomain.Address.CountryTitle,
-                            ProvinceId = accountDomain.Address.ProvinceId,
-                            ProvinceTitle = accountDomain.Address.ProvinceTitle
-                        }
+                        Address = accountDomain.Address == null
+                            ? null
+                            : new AddressViewModel
+                            {
+                                CountryId = accountDomain.Address.CountryId,
+                                CountryTitle = accountDomain.Address.CountryTitle,
+                                ProvinceId = accountDomain.Address.ProvinceId,
+                                ProvinceTitle = accountDomain.Address.ProvinceTitle
+                            }
                     });
         }
 

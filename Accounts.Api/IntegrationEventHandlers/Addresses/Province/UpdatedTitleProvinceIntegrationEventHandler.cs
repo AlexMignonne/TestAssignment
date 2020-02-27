@@ -4,25 +4,25 @@ using Addresses.SharedLibrary.IntegrationEvents.Province;
 using CommonLibrary.RabbitMq;
 using CommonLibrary.RabbitMq.Declare;
 
-namespace Accounts.Service.IntegrationEventHandlers.Addresses.Province
+namespace Accounts.Api.IntegrationEventHandlers.Addresses.Province
 {
-    public sealed class RemoveProvinceIntegrationEventHandler
+    public sealed class UpdatedTitleProvinceIntegrationEventHandler
         : RabbitHandler<
-            RemovedProvinceIntegrationEvent,
-            RemovedProvinceExchange>
+            UpdatedTitleProvinceIntegrationEvent,
+            UpdatedTitleProvinceExchange>
     {
-        public RemoveProvinceIntegrationEventHandler(
+        public UpdatedTitleProvinceIntegrationEventHandler(
             RabbitEndpointConfiguration endpointConfiguration,
             RabbitExchange exchange)
             : base(
                 endpointConfiguration,
                 exchange,
-                "province_removed.account_service")
+                "province_updated_title.account_service")
         {
         }
 
         public override Task Receive(
-            RemovedProvinceIntegrationEvent message,
+            UpdatedTitleProvinceIntegrationEvent message,
             string correlationToken)
         {
             throw new NotImplementedException();

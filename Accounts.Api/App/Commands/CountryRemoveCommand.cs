@@ -1,17 +1,16 @@
 ﻿using System.Collections.Generic;
-using CommonLibrary.RabbitMq.Messages;
+using CommonLibrary.Messages;
 
-namespace Addresses.SharedLibrary.IntegrationEvents.Country
+namespace Accounts.Api.App.Commands
 {
-    public sealed class RemovedCountryIntegrationEvent
-        : Message<RemovedCountryExchange>
+    public sealed class CountryRemoveCommand
+        : Command
     {
-        public RemovedCountryIntegrationEvent(
+        public CountryRemoveCommand(
             string correlationToken,
             int id,
             IEnumerable<int> provinceIds)
-            : base(
-                correlationToken)
+            : base(correlationToken)
         {
             Id = id;
             ProvinceIds = provinceIds;
