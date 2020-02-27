@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Addresses.Api\Addresses.Api.csproj" />
+    <ProjectReference Include="..\Addresses.Domain\Addresses.Domain.csproj" />
+    <ProjectReference Include="..\Addresses.SharedLibrary\Addresses.SharedLibrary.csproj" />
+    <ProjectReference Include="..\CommonLibrary\CommonLibrary.csproj" />
+  </ItemGroup>
+
+</Project>

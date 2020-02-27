@@ -1,0 +1,79 @@
+version: '3.4'
+
+volumes:
+  db-addresses: {}
+  db-accounts: {}
+
+networks:
+  test-assignment:
+    driver: bridge
+
+services:
+  addresses.service:
+    image: ${DOCKER_REGISTRY-}addressesservice
+    build:
+      context: .
+      dockerfile: Addresses.Service/Dockerfile
+    depends_on:
+      - pg_addresses
+      - rabbitmq
+      - redis
+    ports:
+      - "8877:80"
+    networks:
+      - test-assignment
+
+  accounts.service:
+    image: ${DOCKER_REGISTRY-}accountsservice
+    build:
+      context: .
+      dockerfile: Accounts.Service/Dockerfile
+    depends_on:
+      - pg_accounts
+      - rabbitmq
+      - redis
+    ports:
+      - "8855:80"
+    networks:
+      - test-assignment
+
+  pg_addresses:
+    image: postgres:latest
+    restart: unless-stopped
+    environment:
+        - POSTGRES_PASSWORD=ad4282ca0455
+        - POSTGRES_DB=Addresses
+    #volumes:
+    #  - db-addresses:/var/lib/postgresql/data:rw
+    networks:
+      - test-assignment
+
+  pg_accounts:
+    image: postgres:latest
+    restart: unless-stopped
+    environment:
+        - POSTGRES_PASSWORD=ad4282ca0455
+        - POSTGRES_DB=Accounts
+    #volumes:
+    #  - db-accounts:/var/lib/postgresql/data:rw
+    networks:
+      - test-assignment
+
+  rabbitmq:
+    image: 'rabbitmq:3-management'
+    restart: unless-stopped
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=5a433d431090
+    networks:
+      - test-assignment
+    ports:
+      - "15672:15672"
+
+  redis:
+    image: 'bitnami/redis:latest'
+    restart: unless-stopped
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      - test-assignment
