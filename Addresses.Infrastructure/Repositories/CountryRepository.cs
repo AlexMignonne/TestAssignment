@@ -64,8 +64,8 @@ namespace Addresses.Infrastructure.Repositories
             CancellationToken token)
         {
             var countryDomain = await _addressesContext
-                 .Countries
-                 .FindAsync(id);
+                .Countries
+                .FindAsync(id);
 
             if (countryDomain == null)
                 return null;

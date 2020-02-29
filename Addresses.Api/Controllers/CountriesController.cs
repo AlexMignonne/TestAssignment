@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Addresses.Api.App.Commands;
 using Addresses.Api.App.Commands.AddCountry;
 using Addresses.Api.App.Commands.UpdateTitleCountry;
-using Addresses.Api.App.Queries;
 using Addresses.Api.App.Queries.GetByIdCountry;
 using Addresses.Api.App.Queries.GetListCountry;
 using Addresses.SharedLibrary.ViewModels;

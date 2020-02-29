@@ -7,8 +7,7 @@
 
         public bool IsConfigured()
         {
-            return !string.IsNullOrWhiteSpace(Configuration) 
-                   && !string.IsNullOrWhiteSpace(InstanceName);
+            return !string.IsNullOrWhiteSpace(Configuration) && !string.IsNullOrWhiteSpace(InstanceName);
         }
     }
 }

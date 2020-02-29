@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Addresses.Api.App.Queries;
 using Addresses.Api.App.Queries.GetByProvinceIdAddress;
 using Addresses.Domain.AggregatesModel.Address;
 using Addresses.Domain.AggregatesModel.Province;

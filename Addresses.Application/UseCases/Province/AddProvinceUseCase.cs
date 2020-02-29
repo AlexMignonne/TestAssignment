@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Addresses.Api.App.Commands;
 using Addresses.Api.App.Commands.AddProvince;
 using Addresses.Domain.AggregatesModel.Country;
 using Addresses.Domain.AggregatesModel.Province;

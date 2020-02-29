@@ -39,6 +39,7 @@ namespace CommonLibrary.RabbitMq
                         TimeSpan.FromSeconds(30)
                     });
 
+            // TODO 
             waitAndRetry
                 .ExecuteAsync(
                     async () =>

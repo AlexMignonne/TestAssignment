@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Addresses.Api.App.Queries;
 using Addresses.Api.App.Queries.GetByIdProvince;
 using Addresses.Domain.AggregatesModel.Province;
 using MediatR;

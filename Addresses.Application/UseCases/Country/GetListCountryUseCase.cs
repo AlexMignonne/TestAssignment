@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Addresses.Api.App.Queries;
 using Addresses.Api.App.Queries.GetListCountry;
 using Addresses.Domain.AggregatesModel.Country;
 using MediatR;

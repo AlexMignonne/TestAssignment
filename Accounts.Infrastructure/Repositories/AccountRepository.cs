@@ -63,7 +63,7 @@ namespace Accounts.Infrastructure.Repositories
             return countryDomains
                 .AsReadOnly();
         }
-        
+
         public async Task<AccountDomain?> GetByEmail(
             string correlationToken,
             string email,
