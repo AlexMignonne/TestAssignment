@@ -6,7 +6,6 @@ using Addresses.Service.Middlewares;
 using Addresses.SharedLibrary.IntegrationEvents.Country;
 using Addresses.SharedLibrary.IntegrationEvents.Province;
 using CommonLibrary.RabbitMq;
-using CommonLibrary.RabbitMq.Declare;
 using CommonLibrary.RedisCache;
 using CommonLibrary.RequestInfo;
 using CommonLibrary.Swagger;
@@ -83,7 +82,8 @@ namespace Addresses.Service
                 .UseAuthorization()
                 .UseSwagger(
                     Configuration)
-                .UseEndpoints(endpoints => { endpoints.MapControllers(); });
+                .UseEndpoints(
+                    endpoints => { endpoints.MapControllers(); });
 
             app
                 .ApplicationServices

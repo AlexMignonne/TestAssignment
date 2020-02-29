@@ -24,7 +24,8 @@ namespace Accounts.Domain.AggregatesModel.Account
         {
             Id = default;
 
-            if (agree == null || !agree.Value)
+            if (agree == null ||
+                !agree.Value)
                 throw new DomainException(
                     "You must accept the terms of the license agreement");
 

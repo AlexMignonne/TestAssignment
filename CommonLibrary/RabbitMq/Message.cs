@@ -1,7 +1,6 @@
 ﻿using System;
-using CommonLibrary.RabbitMq.Declare;
 
-namespace CommonLibrary.RabbitMq.Messages
+namespace CommonLibrary.RabbitMq
 {
     public abstract class Message<TExchange>
         where TExchange : RabbitExchange, new()

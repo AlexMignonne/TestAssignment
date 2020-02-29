@@ -1,17 +1,15 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Accounts.Api.App.Commands;
 using Addresses.SharedLibrary.IntegrationEvents.Country;
-using CommonLibrary.RabbitMq;
-using CommonLibrary.RabbitMq.Declare;
+using CommonLibrary.RabbitMq.Handler;
 using MediatR;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using RabbitMQ.Client.Events;
 
 namespace Accounts.Api.IntegrationEventHandlers.Addresses.Country
 {
     public sealed class RemovedCountryIntegrationEventHandler
-        : RabbitHandler<
+        : IRabbitHandler<
             RemovedCountryIntegrationEvent,
             RemovedCountryExchange>
     {
@@ -19,29 +17,21 @@ namespace Accounts.Api.IntegrationEventHandlers.Addresses.Country
         private readonly IMediator _mediator;
 
         public RemovedCountryIntegrationEventHandler(
-            RabbitEndpointConfiguration endpointConfiguration,
-            RabbitExchange exchange,
-            IServiceProvider serviceProvider)
-            : base(
-                endpointConfiguration,
-                exchange,
-                "country_removed.account_service")
+            ILogger<RemovedCountryIntegrationEventHandler> logger,
+            IMediator mediator)
         {
-            _logger = serviceProvider
-                .GetService<ILogger<RemovedCountryIntegrationEventHandler>>();
-
-            _mediator = serviceProvider
-                .GetService<IMediator>();
+            _logger = logger;
+            _mediator = mediator;
         }
 
-        public override async Task Receive(
+        public async Task Receive(
             RemovedCountryIntegrationEvent message,
-            string correlationToken)
+            BasicDeliverEventArgs args)
         {
             await _mediator
                 .Send(
                     new CountryRemoveCommand(
-                        correlationToken,
+                        args.BasicProperties.CorrelationId,
                         message.Id,
                         message.ProvinceIds));
         }

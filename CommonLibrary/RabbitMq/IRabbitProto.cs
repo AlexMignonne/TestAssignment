@@ -1,7 +1,4 @@
-﻿using CommonLibrary.RabbitMq.Declare;
-using CommonLibrary.RabbitMq.Messages;
-
-namespace CommonLibrary.RabbitMq
+﻿namespace CommonLibrary.RabbitMq
 {
     public interface IRabbitProto
     {

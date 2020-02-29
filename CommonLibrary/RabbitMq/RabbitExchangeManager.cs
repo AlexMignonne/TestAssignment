@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
 
-namespace CommonLibrary.RabbitMq.Declare
+namespace CommonLibrary.RabbitMq
 {
-    internal static class RabbitExchangeDeclare
+    internal static class RabbitExchangeManager
     {
-        private static readonly Dictionary<string, RabbitExchange> Exchanges
-            = new Dictionary<string, RabbitExchange>();
+        private static readonly ConcurrentDictionary<string, RabbitExchange> Exchanges
+            = new ConcurrentDictionary<string, RabbitExchange>();
 
         internal static bool Add(
             RabbitExchange exchange)
@@ -28,10 +28,9 @@ namespace CommonLibrary.RabbitMq.Declare
                 return false;
 
             return Exchanges
-                       .ContainsKey(name) &&
-                   Exchanges
-                       .Remove(
-                           name);
+                .TryRemove(
+                    name,
+                    out _);
         }
 
         internal static RabbitExchange? Get(

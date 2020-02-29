@@ -1,5 +1,4 @@
 ﻿using CommonLibrary.RabbitMq;
-using CommonLibrary.RabbitMq.Declare;
 
 namespace Addresses.SharedLibrary.IntegrationEvents.Country
 {
@@ -10,7 +9,7 @@ namespace Addresses.SharedLibrary.IntegrationEvents.Country
             : base(
                 new JsonProto(),
                 "addresses.country_added",
-                RabbitExchangeTypeEnum.Fanout,
+                RabbitExchangeType.Fanout,
                 true,
                 false,
                 null)

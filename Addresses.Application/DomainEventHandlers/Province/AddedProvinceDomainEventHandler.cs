@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Addresses.Domain.DomainEvents;
 using Addresses.SharedLibrary.IntegrationEvents.Province;
-using CommonLibrary.RabbitMq;
+using CommonLibrary.RabbitMq.Publisher;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

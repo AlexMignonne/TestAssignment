@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using CommonLibrary.RabbitMq.Declare;
-using CommonLibrary.RabbitMq.Messages;
 using RabbitMQ.Client;
 
-namespace CommonLibrary.RabbitMq
+namespace CommonLibrary.RabbitMq.Publisher
 {
     public sealed class RabbitPublisher
         : IRabbitPublisher
@@ -19,13 +17,13 @@ namespace CommonLibrary.RabbitMq
 
         public Task Publish<TMessage, TExchange>(
             TMessage message,
-            string routingKey = null,
+            string? routingKey = null,
             bool mandatory = false,
-            IBasicProperties properties = null)
+            IBasicProperties? properties = null)
             where TMessage : Message<TExchange>
             where TExchange : RabbitExchange, new()
         {
-            var exchange = RabbitExchangeDeclare
+            var exchange = RabbitExchangeManager
                 .Get(
                     message.ExchangeName);
 
@@ -33,7 +31,7 @@ namespace CommonLibrary.RabbitMq
                 throw new ArgumentException(
                     $"Message {message.ExchangeName} not registered in exchange.");
 
-            if (exchange.Type == RabbitExchangeTypeEnum.Fanout &&
+            if (exchange.Type == RabbitExchangeType.Fanout &&
                 !string.IsNullOrWhiteSpace(routingKey))
                 throw new ArgumentException(
                     "Fanout cannot use routing key.");
@@ -57,7 +55,8 @@ namespace CommonLibrary.RabbitMq
                 properties,
                 exchange
                     .Proto
-                    .MessageToBytes<TMessage, TExchange>(message));
+                    .MessageToBytes<TMessage, TExchange>(
+                        message));
 
             return Task.CompletedTask;
         }

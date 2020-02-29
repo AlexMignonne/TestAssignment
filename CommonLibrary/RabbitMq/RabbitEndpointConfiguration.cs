@@ -8,20 +8,17 @@ namespace CommonLibrary.RabbitMq
         : IDisposable
     {
         public RabbitEndpointConfiguration(
-            string? uri = null)
+            string? uri)
         {
-            if (string.IsNullOrWhiteSpace(uri))
-                throw new ArgumentNullException(
-                    $"{nameof(uri)} in {nameof(RabbitEndpointConfiguration)}");
-
-            var isUri = Uri.TryCreate(
-                uri,
-                UriKind.Absolute,
-                out var factoryUri);
+            var isUri = Uri
+                .TryCreate(
+                    uri,
+                    UriKind.Absolute,
+                    out var factoryUri);
 
             if (!isUri)
                 throw new UriFormatException(
-                    $"{nameof(uri)} in {nameof(RabbitEndpointConfiguration)}");
+                    nameof(uri));
 
             var factory = new ConnectionFactory
             {
@@ -50,8 +47,7 @@ namespace CommonLibrary.RabbitMq
                         Model = Connection
                             .CreateModel();
                     })
-                .GetAwaiter()
-                .GetResult();
+                .Wait();
 
             AppDomain
                 .CurrentDomain

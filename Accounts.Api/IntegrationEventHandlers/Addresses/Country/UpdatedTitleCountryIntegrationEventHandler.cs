@@ -1,29 +1,19 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Addresses.SharedLibrary.IntegrationEvents.Country;
-using CommonLibrary.RabbitMq;
-using CommonLibrary.RabbitMq.Declare;
+using CommonLibrary.RabbitMq.Handler;
+using RabbitMQ.Client.Events;
 
 namespace Accounts.Api.IntegrationEventHandlers.Addresses.Country
 {
     public sealed class UpdatedTitleCountryIntegrationEventHandler
-        : RabbitHandler<
+        : IRabbitHandler<
             UpdatedTitleCountryIntegrationEvent,
             UpdatedTitleCountryExchange>
     {
-        public UpdatedTitleCountryIntegrationEventHandler(
-            RabbitEndpointConfiguration endpointConfiguration,
-            RabbitExchange exchange)
-            : base(
-                endpointConfiguration,
-                exchange,
-                "country_updated_title.account_service")
-        {
-        }
-
-        public override Task Receive(
+        public Task Receive(
             UpdatedTitleCountryIntegrationEvent message,
-            string correlationToken)
+            BasicDeliverEventArgs args)
         {
             throw new NotImplementedException();
         }

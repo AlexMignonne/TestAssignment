@@ -1,29 +1,19 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Addresses.SharedLibrary.IntegrationEvents.Province;
-using CommonLibrary.RabbitMq;
-using CommonLibrary.RabbitMq.Declare;
+using CommonLibrary.RabbitMq.Handler;
+using RabbitMQ.Client.Events;
 
 namespace Accounts.Api.IntegrationEventHandlers.Addresses.Province
 {
     public sealed class RemovedProvinceIntegrationEventHandler
-        : RabbitHandler<
+        : IRabbitHandler<
             RemovedProvinceIntegrationEvent,
             RemovedProvinceExchange>
     {
-        public RemovedProvinceIntegrationEventHandler(
-            RabbitEndpointConfiguration endpointConfiguration,
-            RabbitExchange exchange)
-            : base(
-                endpointConfiguration,
-                exchange,
-                "province_removed.account_service")
-        {
-        }
-
-        public override Task Receive(
+        public Task Receive(
             RemovedProvinceIntegrationEvent message,
-            string correlationToken)
+            BasicDeliverEventArgs args)
         {
             throw new NotImplementedException();
         }

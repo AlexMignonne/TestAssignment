@@ -1,7 +1,5 @@
 ﻿using System.Text;
 using CommonLibrary.RabbitMq;
-using CommonLibrary.RabbitMq.Declare;
-using CommonLibrary.RabbitMq.Messages;
 using Newtonsoft.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 

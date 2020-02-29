@@ -2,18 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CommonLibrary.RabbitMq.Declare;
-using CommonLibrary.RabbitMq.Messages;
+using CommonLibrary.RabbitMq.RabbitMqExceptions;
+using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
-namespace CommonLibrary.RabbitMq
+namespace CommonLibrary.RabbitMq.Handler
 {
-    public abstract class RabbitHandler<TMessage, TExchange>
+    internal sealed class RabbitHandler<TRabbitHandler, TMessage, TExchange>
+        where TRabbitHandler : IRabbitHandler<TMessage, TExchange>
         where TMessage : Message<TExchange>
         where TExchange : RabbitExchange, new()
     {
-        protected RabbitHandler(
+        public RabbitHandler(
+            IServiceProvider serviceProvider,
             RabbitEndpointConfiguration endpointConfiguration,
             RabbitExchange exchange,
             string queue,
@@ -21,14 +23,14 @@ namespace CommonLibrary.RabbitMq
             bool exclusive = false,
             bool autoDelete = false,
             bool autoAct = false,
-            IReadOnlyCollection<string> routingKeys = null,
-            IDictionary<string, object> arguments = null)
+            IReadOnlyCollection<string>? routingKeys = null,
+            IDictionary<string, object>? arguments = null)
         {
             if (exchange == null)
                 throw new ArgumentException(
                     $"Message {typeof(TMessage)} not registered in exchange.");
 
-            if (exchange.Type == RabbitExchangeTypeEnum.Fanout &&
+            if (exchange.Type == RabbitExchangeType.Fanout &&
                 routingKeys != null &&
                 routingKeys.Any())
                 throw new ArgumentException(
@@ -96,9 +98,23 @@ namespace CommonLibrary.RabbitMq
                     .BytesToMessage<TMessage, TExchange>(
                         args.Body);
 
-                await Receive(
-                    message,
-                    args.BasicProperties.CorrelationId);
+                try
+                {
+                    var rabbitHandler = serviceProvider
+                        .GetService<TRabbitHandler>();
+
+                    rabbitHandler
+                        .Receive(
+                            message,
+                            args)
+                        .Wait();
+                }
+                catch (Exception e)
+                {
+                    throw new RabbitMqException(
+                        e.Message,
+                        e);
+                }
 
                 if (!autoAct)
                     model.BasicAck(
@@ -108,14 +124,11 @@ namespace CommonLibrary.RabbitMq
                 await Task.Yield();
             };
 
-            model.BasicConsume(
-                queue,
-                autoAct,
-                consumer);
+            model
+                .BasicConsume(
+                    queue,
+                    autoAct,
+                    consumer);
         }
-
-        public abstract Task Receive(
-            TMessage message,
-            string correlationToken);
     }
 }

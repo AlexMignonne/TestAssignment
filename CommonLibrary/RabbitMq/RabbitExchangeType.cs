@@ -1,6 +1,6 @@
 ﻿namespace CommonLibrary.RabbitMq
 {
-    public enum RabbitExchangeTypeEnum
+    public enum RabbitExchangeType
     {
         Fanout,
         Direct,

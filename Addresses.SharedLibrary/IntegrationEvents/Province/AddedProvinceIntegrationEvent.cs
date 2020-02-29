@@ -1,4 +1,4 @@
-﻿using CommonLibrary.RabbitMq.Messages;
+﻿using CommonLibrary.RabbitMq;
 
 namespace Addresses.SharedLibrary.IntegrationEvents.Province
 {

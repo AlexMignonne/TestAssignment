@@ -1,14 +1,7 @@
-using System.Collections.Generic;
-using Accounts.Api;
-using Accounts.Api.IntegrationEventHandlers.Addresses.Country;
-using Accounts.Api.IntegrationEventHandlers.Addresses.Province;
+using Accounts.Api.Extensions;
 using Accounts.Application.UseCases.Extensions;
 using Accounts.Infrastructure.Extensions;
 using Accounts.Service.Middlewares;
-using Addresses.SharedLibrary.IntegrationEvents.Country;
-using Addresses.SharedLibrary.IntegrationEvents.Province;
-using CommonLibrary.RabbitMq;
-using CommonLibrary.RabbitMq.Declare;
 using CommonLibrary.RedisCache;
 using CommonLibrary.RequestInfo;
 using CommonLibrary.Swagger;
@@ -42,6 +35,8 @@ namespace Accounts.Service
                     typeof(StartupExtension)
                         .Assembly,
                     typeof(Infrastructure.Extensions.StartupExtension)
+                        .Assembly,
+                    typeof(Api.Extensions.StartupExtension)
                         .Assembly
                 )
                 .AddRedisCache(
@@ -49,52 +44,14 @@ namespace Accounts.Service
                 .AddApplicationServices()
                 .AddInfrastructureServices(
                     Configuration)
+                .AddApiServices(
+                    Configuration)
                 .AddSwagger(
                     Configuration)
                 .AddControllers()
                 .AddApplicationPart(
-                    typeof(IApiAssembly).Assembly);
-
-            var rabbitEndpointConfiguration = services
-                .AddRabbitMq(
-                    Configuration,
-                    new List<RabbitExchange>
-                    {
-                        new AddedCountryExchange(),
-                        new RemovedCountryExchange(),
-                        new UpdatedTitleCountryExchange(),
-                        new AddedProvinceExchange(),
-                        new RemovedProvinceExchange(),
-                        new UpdatedTitleProvinceExchange()
-                    });
-
-            services
-                .AddSingleton(
-                    new AddedCountryIntegrationEventHandler(
-                        rabbitEndpointConfiguration,
-                        new AddedCountryExchange()))
-                .AddSingleton(
-                    new RemovedCountryIntegrationEventHandler(
-                        rabbitEndpointConfiguration,
-                        new RemovedCountryExchange(),
-                        services
-                            .BuildServiceProvider()))
-                .AddSingleton(
-                    new UpdatedTitleCountryIntegrationEventHandler(
-                        rabbitEndpointConfiguration,
-                        new UpdatedTitleCountryExchange()))
-                .AddSingleton(
-                    new AddedProvinceIntegrationEventHandler(
-                        rabbitEndpointConfiguration,
-                        new AddedProvinceExchange()))
-                .AddSingleton(
-                    new RemovedProvinceIntegrationEventHandler(
-                        rabbitEndpointConfiguration,
-                        new RemovedProvinceExchange()))
-                .AddSingleton(
-                    new UpdatedTitleProvinceIntegrationEventHandler(
-                        rabbitEndpointConfiguration,
-                        new UpdatedTitleProvinceExchange()));
+                    typeof(Api.Extensions.StartupExtension)
+                        .Assembly);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

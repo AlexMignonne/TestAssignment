@@ -1,29 +1,19 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Addresses.SharedLibrary.IntegrationEvents.Province;
-using CommonLibrary.RabbitMq;
-using CommonLibrary.RabbitMq.Declare;
+using CommonLibrary.RabbitMq.Handler;
+using RabbitMQ.Client.Events;
 
 namespace Accounts.Api.IntegrationEventHandlers.Addresses.Province
 {
     public sealed class AddedProvinceIntegrationEventHandler
-        : RabbitHandler<
+        : IRabbitHandler<
             AddedProvinceIntegrationEvent,
             AddedProvinceExchange>
     {
-        public AddedProvinceIntegrationEventHandler(
-            RabbitEndpointConfiguration endpointConfiguration,
-            RabbitExchange exchange)
-            : base(
-                endpointConfiguration,
-                exchange,
-                "province_added.account_service")
-        {
-        }
-
-        public override Task Receive(
+        public Task Receive(
             AddedProvinceIntegrationEvent message,
-            string correlationToken)
+            BasicDeliverEventArgs args)
         {
             throw new NotImplementedException();
         }

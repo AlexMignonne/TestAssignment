@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using CommonLibrary.RabbitMq.Declare;
+using CommonLibrary.RabbitMq.Publisher;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -24,7 +24,7 @@ namespace CommonLibrary.RabbitMq
                     "RabbitMQ not configured.");
 
             foreach (var exchange in exchanges)
-                RabbitExchangeDeclare
+                RabbitExchangeManager
                     .Add(exchange);
 
             var endpointConfiguration = new RabbitEndpointConfiguration(
