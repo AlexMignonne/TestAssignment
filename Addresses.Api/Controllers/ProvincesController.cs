@@ -1,8 +1,10 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Addresses.Api.App.Commands;
+using Addresses.Api.App.Commands.AddProvince;
+using Addresses.Api.App.Commands.UpdateTitleProvince;
 using Addresses.Api.App.Queries;
-using Addresses.Api.DataTransferObjects;
+using Addresses.Api.App.Queries.GetByIdProvince;
 using Addresses.SharedLibrary.ViewModels;
 using CommonLibrary.RequestInfo;
 using MediatR;
@@ -32,15 +34,15 @@ namespace Addresses.Api.Controllers
             [FromBody] ProvinceViewModel province,
             CancellationToken token = default)
         {
-            var provinceDomain = await _mediator
-                .Send<ProvinceDto>(
+            var dto = await _mediator
+                .Send<AddProvinceDto?>(
                     new AddProvinceCommand(
                         RequestInfo.CorrelationToken,
                         province.CountryId,
                         province.Title),
                     token);
 
-            if (provinceDomain == null)
+            if (dto == null)
                 return BadRequest(
                     $"Country with id {province.CountryId} not exist");
 
@@ -48,12 +50,12 @@ namespace Addresses.Api.Controllers
                 nameof(GetById),
                 new
                 {
-                    provinceDomain.Id
+                    dto.Id
                 },
                 new ProvinceInfoViewModel
                 {
-                    Id = provinceDomain.Id,
-                    Title = provinceDomain.Title
+                    Id = dto.Id,
+                    Title = dto.Title
                 });
         }
 
@@ -62,20 +64,20 @@ namespace Addresses.Api.Controllers
             [FromRoute] int id,
             CancellationToken token = default)
         {
-            var provinceDomain = await _mediator
-                .Send<ProvinceDto>(
+            var dto = await _mediator
+                .Send<GetByIdProvinceDto?>(
                     new GetByIdProvinceQuery(
                         RequestInfo.CorrelationToken,
                         id),
                     token);
 
-            return provinceDomain == null!
+            return dto == null!
                 ? (ActionResult) NotFound()
                 : Ok(
                     new ProvinceInfoViewModel
                     {
-                        Id = provinceDomain.Id,
-                        Title = provinceDomain.Title
+                        Id = dto.Id,
+                        Title = dto.Title
                     });
         }
 
@@ -114,21 +116,21 @@ namespace Addresses.Api.Controllers
             [FromBody] ProvinceInfoViewModel provinceInfo,
             CancellationToken token = default)
         {
-            var countryDomain = await _mediator
-                .Send<ProvinceDto>(
+            var dto = await _mediator
+                .Send<UpdateTitleProvinceDto?>(
                     new UpdateTitleProvinceCommand(
                         RequestInfo.CorrelationToken,
                         provinceInfo.Id,
                         provinceInfo.Title),
                     token);
 
-            return countryDomain == null!
+            return dto == null!
                 ? (ActionResult) NotFound()
                 : Ok(
                     new ProvinceInfoViewModel
                     {
-                        Id = countryDomain.Id,
-                        Title = countryDomain.Title
+                        Id = dto.Id,
+                        Title = dto.Title
                     });
         }
     }

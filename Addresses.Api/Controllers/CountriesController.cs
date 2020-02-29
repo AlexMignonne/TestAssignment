@@ -3,8 +3,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Addresses.Api.App.Commands;
+using Addresses.Api.App.Commands.AddCountry;
+using Addresses.Api.App.Commands.UpdateTitleCountry;
 using Addresses.Api.App.Queries;
-using Addresses.Api.DataTransferObjects;
+using Addresses.Api.App.Queries.GetByIdCountry;
+using Addresses.Api.App.Queries.GetListCountry;
 using Addresses.SharedLibrary.ViewModels;
 using CommonLibrary.RequestInfo;
 using MediatR;
@@ -34,8 +37,8 @@ namespace Addresses.Api.Controllers
             [FromBody] CountryViewModel country,
             CancellationToken token = default)
         {
-            var countryDomain = await _mediator
-                .Send<CountryDto>(
+            var dto = await _mediator
+                .Send<AddCountryDto>(
                     new AddCountryCommand(
                         RequestInfo.CorrelationToken,
                         country.Title),
@@ -45,12 +48,12 @@ namespace Addresses.Api.Controllers
                 nameof(GetById),
                 new
                 {
-                    countryDomain.Id
+                    dto.Id
                 },
                 new CountryInfoViewModel
                 {
-                    Id = countryDomain.Id,
-                    Title = countryDomain.Title
+                    Id = dto.Id,
+                    Title = dto.Title
                 });
         }
 
@@ -59,20 +62,20 @@ namespace Addresses.Api.Controllers
             [FromRoute] int id,
             CancellationToken token = default)
         {
-            var countryDomain = await _mediator
-                .Send<CountryDto>(
+            var dto = await _mediator
+                .Send<GetByIdCountryDto?>(
                     new GetByIdCountryQuery(
                         RequestInfo.CorrelationToken,
                         id),
                     token);
 
-            return countryDomain == null!
+            return dto == null!
                 ? (ActionResult) NotFound()
                 : Ok(
                     new CountryInfoViewModel
                     {
-                        Id = countryDomain.Id,
-                        Title = countryDomain.Title
+                        Id = dto.Id,
+                        Title = dto.Title
                     });
         }
 
@@ -82,15 +85,15 @@ namespace Addresses.Api.Controllers
             [FromQuery] int amount = 10,
             CancellationToken token = default)
         {
-            var countries = await _mediator
-                .Send<IEnumerable<CountryDto>>(
+            var dtos = await _mediator
+                .Send<IEnumerable<GetListCountryDto>?>(
                     new GetListCountryQuery(
                         RequestInfo.CorrelationToken,
                         page,
                         amount),
                     token);
 
-            var countryDomains = countries
+            var countryDomains = dtos
                 .ToList();
 
             return !countryDomains.Any()
@@ -127,21 +130,21 @@ namespace Addresses.Api.Controllers
             [FromBody] CountryInfoViewModel countryInfoViewModel,
             CancellationToken token = default)
         {
-            var countryDomain = await _mediator
-                .Send<CountryDto>(
+            var dto = await _mediator
+                .Send<UpdateTitleCountryDto?>(
                     new UpdateTitleCountryCommand(
                         RequestInfo.CorrelationToken,
                         countryInfoViewModel.Id,
                         countryInfoViewModel.Title),
                     token);
 
-            return countryDomain == null!
+            return dto == null!
                 ? (ActionResult) NotFound()
                 : Ok(
                     new CountryInfoViewModel
                     {
-                        Id = countryDomain.Id,
-                        Title = countryDomain.Title
+                        Id = dto.Id,
+                        Title = dto.Title
                     });
         }
     }

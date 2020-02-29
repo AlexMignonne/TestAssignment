@@ -22,7 +22,7 @@ namespace Accounts.Api.DataTransferObjects
             AccountStatusEnum accountStatus,
             string email,
             int provinceId,
-            AddressDto address)
+            AddressDto? address)
         {
             Id = id;
             AccountStatus = accountStatus;
@@ -35,6 +35,6 @@ namespace Accounts.Api.DataTransferObjects
         public AccountStatusEnum AccountStatus { get; }
         public string Email { get; }
         public int ProvinceId { get; }
-        public AddressDto Address { get; }
+        public AddressDto? Address { get; }
     }
 }

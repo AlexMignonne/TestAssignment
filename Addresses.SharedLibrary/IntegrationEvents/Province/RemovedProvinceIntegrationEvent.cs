@@ -8,12 +8,12 @@ namespace Addresses.SharedLibrary.IntegrationEvents.Province
         public RemovedProvinceIntegrationEvent(
             string correlationToken,
             int id)
-            : base(
-                correlationToken)
         {
+            CorrelationToken = correlationToken;
             Id = id;
         }
 
+        public string CorrelationToken { get; }
         public int Id { get; }
     }
 }

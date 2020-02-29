@@ -67,7 +67,7 @@ namespace Addresses.Infrastructure.Repositories
             return true;
         }
 
-        public async Task<ProvinceDomain> GetById(
+        public async Task<ProvinceDomain?> GetById(
             string correlationToken,
             int id,
             CancellationToken token)

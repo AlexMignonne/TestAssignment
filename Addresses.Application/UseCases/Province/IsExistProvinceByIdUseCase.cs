@@ -27,10 +27,11 @@ namespace Addresses.Application.UseCases.Province
             IsExistProvinceByIdQuery request,
             CancellationToken token)
         {
-            return _provinceQueries.IsExist(
-                request.CorrelationToken,
-                request.Id,
-                token);
+            return _provinceQueries
+                .IsExist(
+                    request.CorrelationToken,
+                    request.Id,
+                    token);
         }
     }
 }

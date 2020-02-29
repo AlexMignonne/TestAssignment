@@ -81,8 +81,8 @@ namespace Addresses.Domain.SeedWork
         }
 
         public static bool operator ==(
-            Entity left,
-            Entity right)
+            Entity? left,
+            Entity? right)
         {
             return Equals(
                 left,
@@ -94,8 +94,8 @@ namespace Addresses.Domain.SeedWork
         }
 
         public static bool operator !=(
-            Entity left,
-            Entity right)
+            Entity? left,
+            Entity? right)
         {
             return !(left == right);
         }

@@ -7,7 +7,9 @@ namespace CommonLibrary.RabbitMq
     public sealed class RabbitEndpointConfiguration
         : IDisposable
     {
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         public RabbitEndpointConfiguration(
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
             string? uri)
         {
             var isUri = Uri

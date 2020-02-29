@@ -1,14 +1,13 @@
-﻿using Addresses.Api.DataTransferObjects;
-using CommonLibrary.Messages;
+﻿using CommonLibrary.Messages;
 using MediatR;
 
-namespace Addresses.Api.App.Commands
+namespace Addresses.Api.App.Commands.UpdateTitleCountry
 {
-    public sealed class UpdateTitleProvinceCommand
+    public sealed class UpdateTitleCountryCommand
         : Command,
-            IRequest<ProvinceDto>
+            IRequest<UpdateTitleCountryDto?>
     {
-        public UpdateTitleProvinceCommand(
+        public UpdateTitleCountryCommand(
             string correlationToken,
             int id,
             string title)

@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
-using Addresses.Api.DataTransferObjects;
 using CommonLibrary.Messages;
 using MediatR;
 
-namespace Addresses.Api.App.Queries
+namespace Addresses.Api.App.Queries.GetListCountry
 {
     public sealed class GetListCountryQuery
         : Command,
-            IRequest<IEnumerable<CountryDto>>
+            IRequest<IEnumerable<GetListCountryDto>?>
     {
         public GetListCountryQuery(
             string correlationToken,

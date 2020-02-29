@@ -26,7 +26,7 @@ namespace Accounts.Infrastructure.Repositories
 
         public IUnitOfWork UnitOfWork => _accountsContext;
 
-        public async Task<AccountDomain> Register(
+        public async Task<AccountDomain?> Register(
             string correlationToken,
             AccountDomain account,
             CancellationToken token)
@@ -63,26 +63,15 @@ namespace Accounts.Infrastructure.Repositories
             return countryDomains
                 .AsReadOnly();
         }
-
-        public async Task<AccountDomain> GetById(
-            string correlationToken,
-            int id,
-            CancellationToken token)
-        {
-            return await _accountsContext
-                .Accounts
-                .FindAsync(
-                    id);
-        }
-
-        public async Task<AccountDomain> GetByEmail(
+        
+        public async Task<AccountDomain?> GetByEmail(
             string correlationToken,
             string email,
             CancellationToken token)
         {
             return await _accountsContext
                 .Accounts
-                .SingleAsync(
+                .SingleOrDefaultAsync(
                     _ => _.Email == email,
                     token);
         }
@@ -97,18 +86,6 @@ namespace Accounts.Infrastructure.Repositories
                 .Where(
                     _ => ids.Contains(_.ProvinceId))
                 .ToListAsync(token);
-        }
-
-        public async Task<bool> IsExist(
-            string correlationToken,
-            int id,
-            CancellationToken token)
-        {
-            return await _accountsContext
-                .Accounts
-                .AnyAsync(
-                    _ => _.Id == id,
-                    token);
         }
 
         public async Task<bool> IsExistByEmail(

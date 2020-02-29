@@ -1,12 +1,11 @@
-﻿using Addresses.Api.DataTransferObjects;
-using CommonLibrary.Messages;
+﻿using CommonLibrary.Messages;
 using MediatR;
 
-namespace Addresses.Api.App.Commands
+namespace Addresses.Api.App.Commands.AddCountry
 {
     public sealed class AddCountryCommand
         : Command,
-            IRequest<CountryDto>
+            IRequest<AddCountryDto>
     {
         public AddCountryCommand(
             string correlationToken,

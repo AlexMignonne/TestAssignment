@@ -12,13 +12,12 @@ namespace Addresses.Domain.AggregatesModel.Country
             int amount = 10,
             CancellationToken token = default);
 
-        Task<CountryDomain> GetById(
+        Task<CountryDomain?> GetById(
             string correlationToken,
             int id,
-            bool include,
             CancellationToken token);
 
-        Task<CountryDomain> GetByProvinceId(
+        Task<CountryDomain?> GetByProvinceId(
             string correlationToken,
             int id,
             CancellationToken token);

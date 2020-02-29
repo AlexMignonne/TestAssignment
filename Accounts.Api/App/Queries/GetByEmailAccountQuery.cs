@@ -6,7 +6,7 @@ namespace Accounts.Api.App.Queries
 {
     public sealed class GetByEmailAccountQuery
         : Command,
-            IRequest<AccountDto>
+            IRequest<AccountDto?>
     {
         public GetByEmailAccountQuery(
             string correlationToken,

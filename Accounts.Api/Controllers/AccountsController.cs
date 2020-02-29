@@ -96,7 +96,7 @@ namespace Accounts.Api.Controllers
             [FromBody] AccountRegisterViewModel viewModel,
             CancellationToken token = default)
         {
-            var countryDomain = await _mediator
+            var accountDto = await _mediator
                 .Send<AccountDto>(
                     new RegisterAccountCommand(
                         RequestInfo.CorrelationToken,
@@ -107,33 +107,33 @@ namespace Accounts.Api.Controllers
                         viewModel.Agree),
                     token);
 
-            if (countryDomain == null)
+            if (accountDto == null)
                 return BadRequest("");
 
             return CreatedAtAction(
                 nameof(GetByEmail),
                 new
                 {
-                    countryDomain.Email
+                    accountDto.Email
                 },
                 new AccountInfoViewModel
                 {
-                    AccountStatus = countryDomain
+                    AccountStatus = accountDto
                         .AccountStatus,
-                    Email = countryDomain
+                    Email = accountDto
                         .Email,
                     Address = new AddressViewModel
                     {
-                        CountryId = countryDomain
+                        CountryId = accountDto
                             .Address
                             .CountryId,
-                        CountryTitle = countryDomain
+                        CountryTitle = accountDto
                             .Address
                             .CountryTitle,
-                        ProvinceId = countryDomain
+                        ProvinceId = accountDto
                             .Address
                             .ProvinceId,
-                        ProvinceTitle = countryDomain
+                        ProvinceTitle = accountDto
                             .Address
                             .ProvinceTitle
                     }

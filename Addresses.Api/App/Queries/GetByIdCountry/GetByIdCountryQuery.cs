@@ -1,12 +1,11 @@
-﻿using Addresses.Api.DataTransferObjects;
-using CommonLibrary.Messages;
+﻿using CommonLibrary.Messages;
 using MediatR;
 
-namespace Addresses.Api.App.Queries
+namespace Addresses.Api.App.Queries.GetByIdCountry
 {
     public sealed class GetByIdCountryQuery
         : Command,
-            IRequest<CountryDto>
+            IRequest<GetByIdCountryDto?>
     {
         public GetByIdCountryQuery(
             string correlationToken,

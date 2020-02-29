@@ -1,22 +1,19 @@
-﻿namespace Addresses.Api.DataTransferObjects
+﻿namespace Addresses.Api.App.Commands.AddProvince
 {
-    public sealed class ProvinceDto
+    public sealed class AddProvinceDto
     {
-        public ProvinceDto(
+        public AddProvinceDto(
             int id,
             int countryId,
-            string title,
-            CountryDto country)
+            string title)
         {
             Id = id;
             CountryId = countryId;
             Title = title;
-            Country = country;
         }
 
         public int Id { get; }
         public int CountryId { get; }
         public string Title { get; }
-        public CountryDto Country { get; }
     }
 }

@@ -59,7 +59,9 @@ namespace Accounts.Domain.AggregatesModel.Account
         }
 
         // ReSharper disable once UnusedMember.Local
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         private AccountDomain(
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
             int provinceId)
         {
             ProvinceId = provinceId;

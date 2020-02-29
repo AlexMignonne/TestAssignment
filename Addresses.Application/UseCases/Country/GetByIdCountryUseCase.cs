@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Addresses.Api.App.Queries;
-using Addresses.Api.DataTransferObjects;
+using Addresses.Api.App.Queries.GetByIdCountry;
 using Addresses.Domain.AggregatesModel.Country;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -12,7 +12,7 @@ namespace Addresses.Application.UseCases.Country
     public sealed class GetByIdCountryUseCase
         : IRequestHandler<
             GetByIdCountryQuery,
-            CountryDto>
+            GetByIdCountryDto?>
     {
         private readonly ICountryQueries _countryQueries;
         private readonly ILogger<GetByIdCountryUseCase> _logger;
@@ -25,35 +25,26 @@ namespace Addresses.Application.UseCases.Country
             _countryQueries = countryQueries;
         }
 
-        public async Task<CountryDto?> Handle(
+        public async Task<GetByIdCountryDto?> Handle(
             GetByIdCountryQuery request,
             CancellationToken token)
         {
-            if (!await _countryQueries
-                .IsExist(
-                    request.CorrelationToken,
-                    request.Id,
-                    token))
-                return null;
-
             var countryDomain = await _countryQueries
                 .GetById(
                     request.CorrelationToken,
                     request.Id,
-                    false,
                     token);
 
-            return new CountryDto(
-                countryDomain.Id,
-                countryDomain.Title,
-                countryDomain.Provinces
-                    .Select(
-                        _ => new ProvinceDto(
-                            _.Id,
-                            countryDomain.Id,
-                            _.Title,
-                            null))
-                    .ToList());
+            return countryDomain == null
+                ? null
+                : new GetByIdCountryDto(
+                    countryDomain.Id,
+                    countryDomain.Title,
+                    countryDomain.Provinces
+                        .Select(
+                            _ => new GetByIdCountryProvinceDto(
+                                _.Id,
+                                _.Title)));
         }
     }
 }

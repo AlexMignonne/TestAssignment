@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Addresses.Api.App.Commands;
-using Addresses.Api.DataTransferObjects;
+using Addresses.Api.App.Commands.UpdateTitleCountry;
 using Addresses.Domain.AggregatesModel.Country;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -11,7 +11,7 @@ namespace Addresses.Application.UseCases.Country
     public sealed class UpdateTitleCountryUseCase
         : IRequestHandler<
             UpdateTitleCountryCommand,
-            CountryDto>
+            UpdateTitleCountryDto?>
     {
         private readonly ICountryCommands _countryCommands;
         private readonly ICountryQueries _countryQueries;
@@ -27,42 +27,38 @@ namespace Addresses.Application.UseCases.Country
             _countryQueries = countryQueries;
         }
 
-        public async Task<CountryDto?> Handle(
+        public async Task<UpdateTitleCountryDto?> Handle(
             UpdateTitleCountryCommand request,
             CancellationToken token)
         {
-            if (!await _countryQueries
-                .IsExist(
-                    request.CorrelationToken,
-                    request.Id,
-                    token))
-                return null;
-
             var countryDomain = await _countryQueries
                 .GetById(
                     request.CorrelationToken,
                     request.Id,
-                    false,
                     token);
 
             countryDomain
-                .UpdateTitle(
+                ?.UpdateTitle(
                     request.CorrelationToken,
                     request.Title);
 
-            _countryCommands
+            if (countryDomain == null)
+                return null;
+
+            if (!await _countryCommands
                 .Update(
                     request.CorrelationToken,
-                    countryDomain);
+                    countryDomain,
+                    token))
+                return null;
 
             await _countryCommands
                 .UnitOfWork
                 .SaveEntitiesAsync(token);
 
-            return new CountryDto(
+            return new UpdateTitleCountryDto(
                 countryDomain.Id,
-                countryDomain.Title,
-                null);
+                countryDomain.Title);
         }
     }
 }

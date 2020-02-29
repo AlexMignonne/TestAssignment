@@ -1,12 +1,11 @@
-﻿using Addresses.Api.DataTransferObjects;
-using CommonLibrary.Messages;
+﻿using CommonLibrary.Messages;
 using MediatR;
 
-namespace Addresses.Api.App.Queries
+namespace Addresses.Api.App.Queries.GetByIdProvince
 {
     public sealed class GetByIdProvinceQuery
         : Command,
-            IRequest<ProvinceDto>
+            IRequest<GetByIdProvinceDto?>
     {
         public GetByIdProvinceQuery(
             string correlationToken,

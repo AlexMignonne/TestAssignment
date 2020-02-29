@@ -20,7 +20,7 @@ namespace Addresses.Infrastructure.Repositories
             _addressesContext = addressesContext;
         }
 
-        public async Task<ProvinceDomain> GetByProvinceId(
+        public async Task<ProvinceDomain?> GetByProvinceId(
             string correlationToken,
             int id,
             CancellationToken token)
@@ -29,6 +29,9 @@ namespace Addresses.Infrastructure.Repositories
                 .Province
                 .FindAsync(
                     id);
+
+            if (provinceDomain == null)
+                return null;
 
             await _addressesContext
                 .Entry(provinceDomain)

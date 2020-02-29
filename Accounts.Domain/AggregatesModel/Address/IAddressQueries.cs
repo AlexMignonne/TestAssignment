@@ -5,7 +5,7 @@ namespace Accounts.Domain.AggregatesModel.Address
 {
     public interface IAddressQueries
     {
-        Task<AddressDomain> GetByProvinceId(
+        Task<AddressDomain?> GetByProvinceId(
             string correlationToken,
             int id,
             CancellationToken token);

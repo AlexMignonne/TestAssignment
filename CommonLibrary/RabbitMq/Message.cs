@@ -5,11 +5,8 @@ namespace CommonLibrary.RabbitMq
     public abstract class Message<TExchange>
         where TExchange : RabbitExchange, new()
     {
-        protected Message(
-            string correlationIToken)
+        protected Message()
         {
-            CorrelationToken = correlationIToken;
-
             ExchangeName = new TExchange()
                 .Name;
 
@@ -20,7 +17,6 @@ namespace CommonLibrary.RabbitMq
                 .UtcNow;
         }
 
-        public string CorrelationToken { get; }
         public string ExchangeName { get; }
         public string MessageType { get; }
         public DateTime DateCreated { get; }

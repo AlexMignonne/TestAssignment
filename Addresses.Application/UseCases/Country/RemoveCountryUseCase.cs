@@ -34,13 +34,6 @@ namespace Addresses.Application.UseCases.Country
             RemoveCountryCommand request,
             CancellationToken token)
         {
-            if (!await _countryQueries
-                .IsExist(
-                    request.CorrelationToken,
-                    request.Id,
-                    token))
-                return false;
-
             var countryDomain = await _countryCommands
                 .Remove(
                     request.CorrelationToken,

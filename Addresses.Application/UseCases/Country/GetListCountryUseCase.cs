@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Addresses.Api.App.Queries;
-using Addresses.Api.DataTransferObjects;
+using Addresses.Api.App.Queries.GetListCountry;
 using Addresses.Domain.AggregatesModel.Country;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -13,7 +13,7 @@ namespace Addresses.Application.UseCases.Country
     public sealed class GetListCountryUseCase
         : IRequestHandler<
             GetListCountryQuery,
-            IEnumerable<CountryDto>>
+            IEnumerable<GetListCountryDto>?>
     {
         private readonly ICountryQueries _countryQueries;
         private readonly ILogger<GetListCountryUseCase> _logger;
@@ -26,7 +26,7 @@ namespace Addresses.Application.UseCases.Country
             _countryQueries = countryQueries;
         }
 
-        public async Task<IEnumerable<CountryDto>> Handle(
+        public async Task<IEnumerable<GetListCountryDto>?> Handle(
             GetListCountryQuery request,
             CancellationToken token)
         {
@@ -39,10 +39,9 @@ namespace Addresses.Application.UseCases.Country
 
             return countryDomains
                 .Select(
-                    _ => new CountryDto(
+                    _ => new GetListCountryDto(
                         _.Id,
-                        _.Title,
-                        null));
+                        _.Title));
         }
     }
 }

@@ -1,12 +1,11 @@
-﻿using Addresses.Api.DataTransferObjects;
-using CommonLibrary.Messages;
+﻿using CommonLibrary.Messages;
 using MediatR;
 
-namespace Addresses.Api.App.Commands
+namespace Addresses.Api.App.Commands.AddProvince
 {
     public sealed class AddProvinceCommand
         : Command,
-            IRequest<ProvinceDto>
+            IRequest<AddProvinceDto?>
     {
         public AddProvinceCommand(
             string correlationToken,

@@ -15,7 +15,7 @@ namespace Accounts.Application.UseCases.Account
     public sealed class GetByEmailAccountUseCase
         : IRequestHandler<
             GetByEmailAccountQuery,
-            AccountDto>
+            AccountDto?>
     {
         private readonly IAccountQueries _accountQueries;
         private readonly IAddressQueries _addressQueries;
@@ -35,21 +35,18 @@ namespace Accounts.Application.UseCases.Account
             GetByEmailAccountQuery request,
             CancellationToken token)
         {
-            if (!await _accountQueries
-                .IsExistByEmail(
-                    request.CorrelationToken,
-                    request.Email,
-                    token))
-                return null;
-
             var accountDomain = await _accountQueries
                 .GetByEmail(
                     request.CorrelationToken,
                     request.Email,
                     token);
 
+            if (accountDomain == null)
+                return null;
+
             if (Equals(
-                accountDomain.AccountStatus,
+                accountDomain
+                    .AccountStatus,
                 AccountStatusType.AddressVerificationRequired))
                 return new AccountDto(
                     accountDomain.Id,

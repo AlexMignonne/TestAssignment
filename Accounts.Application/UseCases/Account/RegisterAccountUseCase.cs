@@ -33,7 +33,7 @@ namespace Accounts.Application.UseCases.Account
             _addressQueries = addressQueries;
         }
 
-        public async Task<AccountDto> Handle(
+        public async Task<AccountDto?> Handle(
             RegisterAccountCommand request,
             CancellationToken token)
         {

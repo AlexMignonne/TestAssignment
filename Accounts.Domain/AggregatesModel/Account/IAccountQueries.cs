@@ -12,12 +12,7 @@ namespace Accounts.Domain.AggregatesModel.Account
             int amount = 10,
             CancellationToken token = default);
 
-        Task<AccountDomain> GetById(
-            string correlationToken,
-            int id,
-            CancellationToken token);
-
-        Task<AccountDomain> GetByEmail(
+        Task<AccountDomain?> GetByEmail(
             string correlationToken,
             string email,
             CancellationToken token);
@@ -25,11 +20,6 @@ namespace Accounts.Domain.AggregatesModel.Account
         Task<IEnumerable<AccountDomain>> GetByProvinceIds(
             string correlationToken,
             IEnumerable<int> ids,
-            CancellationToken token);
-
-        Task<bool> IsExist(
-            string correlationToken,
-            int id,
             CancellationToken token);
 
         Task<bool> IsExistByEmail(

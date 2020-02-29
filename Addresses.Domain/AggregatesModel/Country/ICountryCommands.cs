@@ -7,14 +7,15 @@ namespace Addresses.Domain.AggregatesModel.Country
     public interface ICountryCommands
         : IRepository<CountryDomain>
     {
-        Task<CountryDomain> Add(
+        Task<CountryDomain?> Add(
             string correlationToken,
             CountryDomain country,
             CancellationToken token);
 
-        void Update(
+        Task<bool> Update(
             string correlationToken,
-            CountryDomain country);
+            CountryDomain country,
+            CancellationToken token);
 
         Task<CountryDomain?> Remove(
             string correlationToken,

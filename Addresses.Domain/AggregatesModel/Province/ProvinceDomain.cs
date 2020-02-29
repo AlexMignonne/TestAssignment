@@ -15,7 +15,7 @@ namespace Addresses.Domain.AggregatesModel.Province
         {
             Id = default;
             CountryId = default;
-            Country = default;
+            Country = default!;
 
             Title = string.IsNullOrWhiteSpace(title)
                 ? throw new DomainException(
@@ -29,7 +29,9 @@ namespace Addresses.Domain.AggregatesModel.Province
         }
 
         // ReSharper disable once UnusedMember.Local
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         private ProvinceDomain()
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         {
         }
 
@@ -45,12 +47,14 @@ namespace Addresses.Domain.AggregatesModel.Province
 
         public void UpdateTitle(
             string correlationId,
-            string title)
+            string? title)
         {
+#pragma warning disable CS8601 // Possible null reference assignment.
             Title = string.IsNullOrWhiteSpace(title)
                 ? throw new DomainException(
                     $"{nameof(Title)} cannot be empty.")
                 : title;
+#pragma warning restore CS8601 // Possible null reference assignment.
 
             AddDomainEvent(
                 new UpdateTitleProvinceDomainEvent(

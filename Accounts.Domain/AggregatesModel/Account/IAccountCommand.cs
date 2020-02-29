@@ -7,7 +7,7 @@ namespace Accounts.Domain.AggregatesModel.Account
     public interface IAccountCommand
         : IRepository<AccountDomain>
     {
-        Task<AccountDomain> Register(
+        Task<AccountDomain?> Register(
             string correlationToken,
             AccountDomain account,
             CancellationToken token);

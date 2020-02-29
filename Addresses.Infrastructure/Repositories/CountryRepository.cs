@@ -26,7 +26,7 @@ namespace Addresses.Infrastructure.Repositories
 
         public IUnitOfWork UnitOfWork => _addressesContext;
 
-        public async Task<CountryDomain> Add(
+        public async Task<CountryDomain?> Add(
             string correlationToken,
             CountryDomain country,
             CancellationToken token)
@@ -40,13 +40,22 @@ namespace Addresses.Infrastructure.Repositories
             return entityEntry.Entity;
         }
 
-        public void Update(
+        public async Task<bool> Update(
             string correlationToken,
-            CountryDomain country)
+            CountryDomain country,
+            CancellationToken token)
         {
+            if (!await IsExist(
+                correlationToken,
+                country.Id,
+                token))
+                return false;
+
             _addressesContext
                 .Countries
                 .Update(country);
+
+            return true;
         }
 
         public async Task<CountryDomain?> Remove(
@@ -54,13 +63,11 @@ namespace Addresses.Infrastructure.Repositories
             int id,
             CancellationToken token)
         {
-            var countryDomain = await GetById(
-                correlationToken,
-                id,
-                true,
-                token);
+            var countryDomain = await _addressesContext
+                 .Countries
+                 .FindAsync(id);
 
-            if (countryDomain == null!)
+            if (countryDomain == null)
                 return null;
 
             _addressesContext
@@ -94,26 +101,20 @@ namespace Addresses.Infrastructure.Repositories
                 .AsReadOnly();
         }
 
-        public async Task<CountryDomain> GetById(
+        public async Task<CountryDomain?> GetById(
             string correlationToken,
             int id,
-            bool include,
             CancellationToken token)
         {
-            return include
-                ? await _addressesContext
-                    .Countries
-                    .Include(_ => _.Provinces)
-                    .SingleOrDefaultAsync(
-                        _ => _.Id == id,
-                        token)
-                : await _addressesContext
-                    .Countries
-                    .FindAsync(
-                        id);
+            return await _addressesContext
+                .Countries
+                .Include(_ => _.Provinces)
+                .SingleOrDefaultAsync(
+                    _ => _.Id == id,
+                    token);
         }
 
-        public async Task<CountryDomain> GetByProvinceId(
+        public async Task<CountryDomain?> GetByProvinceId(
             string correlationToken,
             int provinceId,
             CancellationToken token)

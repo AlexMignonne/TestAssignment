@@ -18,9 +18,11 @@ namespace Addresses.Infrastructure
             IUnitOfWork
     {
         private readonly IMediator _mediator;
-        private IDbContextTransaction _currentTransaction;
+        private IDbContextTransaction? _currentTransaction;
 
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         public AddressesContext(
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
             DbContextOptions options,
             IMediator mediator)
             : base(options)
@@ -29,7 +31,9 @@ namespace Addresses.Infrastructure
         }
 
         // ReSharper disable once UnusedMember.Local
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         private AddressesContext()
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         {
         }
 
@@ -113,7 +117,7 @@ namespace Addresses.Infrastructure
                 if (_currentTransaction != null)
                 {
                     _currentTransaction.Dispose();
-                    _currentTransaction = null!;
+                    _currentTransaction = null;
                 }
             }
         }

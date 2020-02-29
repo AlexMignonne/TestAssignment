@@ -20,7 +20,7 @@ namespace Accounts.Infrastructure.Repositories
             _addressesHttpClient = addressesHttpClient;
         }
 
-        public async Task<AddressDomain> GetByProvinceId(
+        public async Task<AddressDomain?> GetByProvinceId(
             string correlationToken,
             int id,
             CancellationToken token)

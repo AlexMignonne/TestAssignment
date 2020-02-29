@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Addresses.Api.App.Commands;
-using Addresses.Api.DataTransferObjects;
+using Addresses.Api.App.Commands.AddProvince;
 using Addresses.Domain.AggregatesModel.Country;
 using Addresses.Domain.AggregatesModel.Province;
 using MediatR;
@@ -12,7 +12,7 @@ namespace Addresses.Application.UseCases.Province
     public sealed class AddProvinceUseCase
         : IRequestHandler<
             AddProvinceCommand,
-            ProvinceDto>
+            AddProvinceDto?>
     {
         private readonly ICountryCommands _countryCommands;
         private readonly ICountryQueries _countryQueries;
@@ -28,23 +28,18 @@ namespace Addresses.Application.UseCases.Province
             _countryQueries = countryQueries;
         }
 
-        public async Task<ProvinceDto?> Handle(
+        public async Task<AddProvinceDto?> Handle(
             AddProvinceCommand request,
             CancellationToken token)
         {
-            if (!await _countryQueries
-                .IsExist(
-                    request.CorrelationToken,
-                    request.CountryId,
-                    token))
-                return null;
-
             var countryDomain = await _countryQueries
                 .GetById(
                     request.CorrelationToken,
                     request.CountryId,
-                    false,
                     token);
+
+            if (countryDomain == null)
+                return null;
 
             var provinceDomain = new ProvinceDomain(
                 request.CorrelationToken,
@@ -57,11 +52,10 @@ namespace Addresses.Application.UseCases.Province
                 .UnitOfWork
                 .SaveEntitiesAsync(token);
 
-            return new ProvinceDto(
+            return new AddProvinceDto(
                 provinceDomain.Id,
                 provinceDomain.Country.Id,
-                provinceDomain.Title,
-                null);
+                provinceDomain.Title);
         }
     }
 }

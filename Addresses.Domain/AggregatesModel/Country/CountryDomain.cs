@@ -31,8 +31,11 @@ namespace Addresses.Domain.AggregatesModel.Country
                     this));
         }
 
+
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         // ReSharper disable once UnusedMember.Local
         private CountryDomain()
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         {
         }
 
@@ -64,26 +67,32 @@ namespace Addresses.Domain.AggregatesModel.Country
             _provinces.Add(province);
         }
 
-        public void ProvinceRemove(
+        public bool ProvinceRemove(
             string correlationId,
             ProvinceDomain province)
         {
-            _provinces
-                .Remove(province);
+            if (!_provinces
+                .Remove(province))
+                return false;
 
             AddDomainEvent(
                 new RemoveProvinceDomainEvent(
                     correlationId,
                     province));
+
+            return true;
         }
 
-        public void ProvinceRemove(
+        public bool ProvinceRemove(
             string correlationId,
             int provinceId)
         {
             var provinceDomain = _provinces
                 .Single(
                     _ => _.Id == provinceId);
+
+            if (provinceDomain == null)
+                return false;
 
             _provinces
                 .Remove(
@@ -93,6 +102,8 @@ namespace Addresses.Domain.AggregatesModel.Country
                 new RemoveProvinceDomainEvent(
                     correlationId,
                     provinceDomain));
+
+            return true;
         }
     }
 }

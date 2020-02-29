@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Addresses.Api.App.Queries;
-using Addresses.Api.DataTransferObjects;
+using Addresses.Api.App.Queries.GetByIdProvince;
 using Addresses.Domain.AggregatesModel.Province;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -11,7 +11,7 @@ namespace Addresses.Application.UseCases.Province
     public sealed class GetByIdProvinceUseCase
         : IRequestHandler<
             GetByIdProvinceQuery,
-            ProvinceDto>
+            GetByIdProvinceDto?>
     {
         private readonly ILogger<GetByIdProvinceUseCase> _logger;
         private readonly IProvinceQueries _provinceQueries;
@@ -24,28 +24,22 @@ namespace Addresses.Application.UseCases.Province
             _provinceQueries = provinceQueries;
         }
 
-        public async Task<ProvinceDto?> Handle(
+        public async Task<GetByIdProvinceDto?> Handle(
             GetByIdProvinceQuery request,
             CancellationToken token)
         {
-            if (!await _provinceQueries
-                .IsExist(
-                    request.CorrelationToken,
-                    request.Id,
-                    token))
-                return null;
-
             var provinceDomain = await _provinceQueries
                 .GetById(
                     request.CorrelationToken,
                     request.Id,
                     token);
 
-            return new ProvinceDto(
-                provinceDomain.Id,
-                provinceDomain.CountryId,
-                provinceDomain.Title,
-                null);
+            return provinceDomain == null
+                ? null
+                : new GetByIdProvinceDto(
+                    provinceDomain.Id,
+                    provinceDomain.CountryId,
+                    provinceDomain.Title);
         }
     }
 }

@@ -10,13 +10,13 @@ namespace Addresses.SharedLibrary.IntegrationEvents.Country
             string correlationToken,
             int id,
             IEnumerable<int> provinceIds)
-            : base(
-                correlationToken)
         {
+            CorrelationToken = correlationToken;
             Id = id;
             ProvinceIds = provinceIds;
         }
 
+        public string CorrelationToken { get; }
         public int Id { get; }
         public IEnumerable<int> ProvinceIds { get; }
     }

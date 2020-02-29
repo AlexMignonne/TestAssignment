@@ -7,7 +7,7 @@ namespace Accounts.Api.App.Commands
 {
     public sealed class RegisterAccountCommand
         : Command,
-            IRequest<AccountDto>
+            IRequest<AccountDto?>
     {
         public RegisterAccountCommand(
             string correlationToken,

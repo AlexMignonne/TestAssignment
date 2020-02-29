@@ -9,13 +9,13 @@ namespace Addresses.SharedLibrary.IntegrationEvents.Province
             string correlationToken,
             int id,
             string title)
-            : base(
-                correlationToken)
         {
+            CorrelationToken = correlationToken;
             Id = id;
             Title = title;
         }
 
+        public string CorrelationToken { get; }
         public int Id { get; }
         public string Title { get; }
     }

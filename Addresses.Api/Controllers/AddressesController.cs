@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Addresses.Api.App.Queries;
-using Addresses.Api.DataTransferObjects;
+using Addresses.Api.App.Queries.GetByProvinceIdAddress;
 using Addresses.SharedLibrary.ViewModels;
 using CommonLibrary.RequestInfo;
 using MediatR;
@@ -31,28 +31,26 @@ namespace Addresses.Api.Controllers
             int id,
             CancellationToken token)
         {
-            var provinceDomain = await _mediator
-                .Send<ProvinceDto>(
+            var dto = await _mediator
+                .Send<GetByProvinceIdAddressDto?>(
                     new GetByProvinceIdAddressQuery(
                         RequestInfo.CorrelationToken,
                         id),
                     token);
 
-            if (provinceDomain == null!)
+            if (dto == null)
                 return NotFound();
 
             var addressViewModel = new AddressViewModel
             {
-                CountryId = provinceDomain
-                    .Country
-                    .Id,
-                CountryTitle = provinceDomain
-                    .Country
-                    .Title,
-                ProvinceId = provinceDomain
-                    .Id,
-                ProvinceTitle = provinceDomain
-                    .Title
+                CountryId = dto
+                    .CountryId,
+                CountryTitle = dto
+                    .CountryTitle,
+                ProvinceId = dto
+                    .ProvinceId,
+                ProvinceTitle = dto
+                    .ProvinceTitle
             };
 
             return Ok(

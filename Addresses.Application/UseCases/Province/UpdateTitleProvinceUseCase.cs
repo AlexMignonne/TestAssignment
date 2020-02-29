@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Addresses.Api.App.Commands;
-using Addresses.Api.DataTransferObjects;
+using Addresses.Api.App.Commands.UpdateTitleProvince;
 using Addresses.Domain.AggregatesModel.Province;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -11,7 +11,7 @@ namespace Addresses.Application.UseCases.Province
     public sealed class UpdateTitleProvinceUseCase
         : IRequestHandler<
             UpdateTitleProvinceCommand,
-            ProvinceDto>
+            UpdateTitleProvinceDto?>
     {
         private readonly ILogger<UpdateTitleProvinceUseCase> _logger;
         private readonly IProvinceCommands _provinceCommands;
@@ -27,22 +27,18 @@ namespace Addresses.Application.UseCases.Province
             _provinceQueries = provinceQueries;
         }
 
-        public async Task<ProvinceDto?> Handle(
+        public async Task<UpdateTitleProvinceDto?> Handle(
             UpdateTitleProvinceCommand request,
             CancellationToken token)
         {
-            if (!await _provinceQueries
-                .IsExist(
-                    request.CorrelationToken,
-                    request.Id,
-                    token))
-                return null;
-
             var provinceDomain = await _provinceQueries
                 .GetById(
                     request.CorrelationToken,
                     request.Id,
                     token);
+
+            if (provinceDomain == null)
+                return null;
 
             provinceDomain
                 .UpdateTitle(
@@ -58,11 +54,10 @@ namespace Addresses.Application.UseCases.Province
                 .UnitOfWork
                 .SaveEntitiesAsync(token);
 
-            return new ProvinceDto(
+            return new UpdateTitleProvinceDto(
                 provinceDomain.Id,
-                provinceDomain.Country.Id,
-                provinceDomain.Title,
-                null);
+                provinceDomain.CountryId,
+                provinceDomain.Title);
         }
     }
 }

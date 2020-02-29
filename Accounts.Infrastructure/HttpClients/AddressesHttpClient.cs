@@ -38,7 +38,7 @@ namespace Accounts.Infrastructure.HttpClients
             _httpClient = httpClient;
         }
 
-        public async Task<AddressDomain>? GetByProvinceId(
+        public async Task<AddressDomain?> GetByProvinceId(
             string correlationToken,
             int id,
             CancellationToken token)

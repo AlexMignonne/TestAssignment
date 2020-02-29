@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 
-namespace Addresses.Api.DataTransferObjects
+namespace Addresses.Api.App.Queries.GetByIdCountry
 {
-    public sealed class CountryDto
+    public sealed class GetByIdCountryDto
     {
-        public CountryDto(
+        public GetByIdCountryDto(
             int id,
             string title,
-            List<ProvinceDto> provinces)
+            IEnumerable<GetByIdCountryProvinceDto> provinces)
         {
             Id = id;
             Title = title;
@@ -16,6 +16,6 @@ namespace Addresses.Api.DataTransferObjects
 
         public int Id { get; }
         public string Title { get; }
-        public List<ProvinceDto> Provinces { get; }
+        public IEnumerable<GetByIdCountryProvinceDto> Provinces { get; }
     }
 }
