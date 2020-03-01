@@ -1,7 +1,7 @@
 ﻿using Accounts.Application.UseCases.Account;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Accounts.Application.UseCases.Extensions
+namespace Accounts.Application.Extensions
 {
     public static class StartupExtension
     {

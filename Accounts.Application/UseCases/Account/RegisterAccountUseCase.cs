@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Accounts.Api.App.Commands;
-using Accounts.Api.DataTransferObjects;
+using Accounts.Api.App.Commands.AccountRegister;
 using Accounts.Application.Exceptions;
 using Accounts.Domain.AggregatesModel.Account;
 using Accounts.Domain.AggregatesModel.Address;
@@ -13,8 +12,8 @@ namespace Accounts.Application.UseCases.Account
 {
     internal class RegisterAccountUseCase
         : IRequestHandler<
-            RegisterAccountCommand,
-            AccountDto>
+            AccountRegisterCommand,
+            AccountRegisterDto?>
     {
         private readonly IAccountCommand _accountCommand;
         private readonly IAccountQueries _accountQueries;
@@ -33,8 +32,8 @@ namespace Accounts.Application.UseCases.Account
             _addressQueries = addressQueries;
         }
 
-        public async Task<AccountDto?> Handle(
-            RegisterAccountCommand request,
+        public async Task<AccountRegisterDto?> Handle(
+            AccountRegisterCommand request,
             CancellationToken token)
         {
             if (await _accountQueries
@@ -45,19 +44,15 @@ namespace Accounts.Application.UseCases.Account
                 throw new AppException(
                     $"Account on the mail {request.Email} is already registered");
 
-            if (!await _addressQueries
-                .IsExistByProvinceId(
-                    request.CorrelationToken,
-                    request.ProvinceId,
-                    token))
-                throw new AppException(
-                    $"Province with id {request.ProvinceId} not exist");
-
             var address = await _addressQueries
                 .GetByProvinceId(
                     request.CorrelationToken,
                     request.ProvinceId,
                     token);
+
+            if (address == null)
+                throw new AppException(
+                    $"Province with id {request.ProvinceId} not exist");
 
             var accountDomain = await _accountCommand
                 .Register(
@@ -70,16 +65,18 @@ namespace Accounts.Application.UseCases.Account
                         request.ProvinceId),
                     token);
 
+            if (accountDomain == null)
+                return null;
+
             await _accountCommand
                 .UnitOfWork
                 .SaveEntitiesAsync(token);
 
-            return new AccountDto(
+            return new AccountRegisterDto(
                 accountDomain.Id,
-                (AccountStatusEnum) accountDomain.AccountStatus.Id,
+                (AccountStatusEnum)accountDomain.AccountStatus.Id,
                 accountDomain.Email,
-                accountDomain.ProvinceId,
-                new AddressDto(
+                new AccountRegisterAddressDto(
                     address.CountryId,
                     address.CountryTitle,
                     address.ProvinceId,

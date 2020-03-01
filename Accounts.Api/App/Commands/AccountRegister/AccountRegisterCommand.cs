@@ -1,15 +1,14 @@
-﻿using Accounts.Api.DataTransferObjects;
-using Accounts.SharedLibrary.ViewModels;
+﻿using Accounts.SharedLibrary.ViewModels;
 using CommonLibrary.Messages;
 using MediatR;
 
-namespace Accounts.Api.App.Commands
+namespace Accounts.Api.App.Commands.AccountRegister
 {
-    public sealed class RegisterAccountCommand
+    public sealed class AccountRegisterCommand
         : Command,
-            IRequest<AccountDto?>
+            IRequest<AccountRegisterDto?>
     {
-        public RegisterAccountCommand(
+        public AccountRegisterCommand(
             string correlationToken,
             AccountStatusEnum accountStatus,
             string email,

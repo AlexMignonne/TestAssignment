@@ -1,6 +1,6 @@
-﻿namespace Accounts.SharedLibrary.ViewModels
+﻿namespace Accounts.SharedLibrary.ViewModels.AccountRegister
 {
-    public sealed class AccountRegisterViewModel
+    public sealed class AccountRegisterRequestVM
     {
         public string Email { get; set; }
         public string Password { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace Accounts.SharedLibrary.ViewModels
 {
-    public sealed class AccountViewModel
+    public sealed class GetListAccountResponseVM
     {
         public AccountStatusEnum AccountStatus { get; set; }
         public string Email { get; set; }

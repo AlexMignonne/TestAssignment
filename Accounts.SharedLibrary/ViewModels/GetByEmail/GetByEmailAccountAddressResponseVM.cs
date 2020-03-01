@@ -1,6 +1,6 @@
-﻿namespace Accounts.SharedLibrary.ViewModels
+﻿namespace Accounts.SharedLibrary.ViewModels.GetByEmail
 {
-    public sealed class AddressViewModel
+    public sealed class GetByEmailAccountAddressResponseVM
     {
         public int CountryId { get; set; }
         public string CountryTitle { get; set; }

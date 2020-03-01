@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
-using Accounts.Api.DataTransferObjects;
 using CommonLibrary.Messages;
 using MediatR;
 
-namespace Accounts.Api.App.Queries
+namespace Accounts.Api.App.Queries.GetListAccount
 {
     public sealed class GetListAccountQuery
         : Command,
-            IRequest<IEnumerable<AccountDto>>
+            IRequest<IEnumerable<GetListAccountDto>?>
     {
         public GetListAccountQuery(
             string correlationToken,

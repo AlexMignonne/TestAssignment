@@ -1,12 +1,11 @@
-﻿using Accounts.Api.DataTransferObjects;
-using CommonLibrary.Messages;
+﻿using CommonLibrary.Messages;
 using MediatR;
 
-namespace Accounts.Api.App.Queries
+namespace Accounts.Api.App.Queries.GetByEmail
 {
     public sealed class GetByEmailAccountQuery
         : Command,
-            IRequest<AccountDto?>
+            IRequest<GetByEmailAccountDto?>
     {
         public GetByEmailAccountQuery(
             string correlationToken,

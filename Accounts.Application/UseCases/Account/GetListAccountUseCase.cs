@@ -2,8 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Accounts.Api.App.Queries;
-using Accounts.Api.DataTransferObjects;
+using Accounts.Api.App.Queries.GetListAccount;
 using Accounts.Domain.AggregatesModel.Account;
 using Accounts.SharedLibrary.ViewModels;
 using MediatR;
@@ -14,7 +13,7 @@ namespace Accounts.Application.UseCases.Account
     public sealed class GetListAccountUseCase
         : IRequestHandler<
             GetListAccountQuery,
-            IEnumerable<AccountDto>>
+            IEnumerable<GetListAccountDto>?>
     {
         private readonly IAccountQueries _accountQueries;
         private readonly ILogger<GetListAccountUseCase> _logger;
@@ -27,7 +26,7 @@ namespace Accounts.Application.UseCases.Account
             _accountQueries = accountQueries;
         }
 
-        public async Task<IEnumerable<AccountDto>> Handle(
+        public async Task<IEnumerable<GetListAccountDto>?> Handle(
             GetListAccountQuery request,
             CancellationToken token)
         {
@@ -40,12 +39,11 @@ namespace Accounts.Application.UseCases.Account
 
             return accountDomains
                 .Select(
-                    _ => new AccountDto(
+                    _ => new GetListAccountDto(
                         _.Id,
                         (AccountStatusEnum) _.AccountStatus.Id,
                         _.Email,
-                        _.ProvinceId,
-                        null));
+                        _.ProvinceId));
         }
     }
 }

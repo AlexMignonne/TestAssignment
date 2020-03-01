@@ -85,12 +85,12 @@ namespace Accounts.Domain.SeedWork
             Entity? right)
         {
             return Equals(
-                left,
+                left!,
                 null)
                 ? Equals(
                     right,
                     null)
-                : left.Equals(right);
+                : left.Equals(right!);
         }
 
         public static bool operator !=(

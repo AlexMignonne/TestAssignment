@@ -6,7 +6,7 @@ namespace Accounts.Domain.AggregatesModel.Account
 {
     public interface IAccountQueries
     {
-        Task<IEnumerable<AccountDomain>> GetList(
+        Task<IEnumerable<AccountDomain>?> GetList(
             string correlationToken,
             int page = 1,
             int amount = 10,
@@ -17,7 +17,7 @@ namespace Accounts.Domain.AggregatesModel.Account
             string email,
             CancellationToken token);
 
-        Task<IEnumerable<AccountDomain>> GetByProvinceIds(
+        Task<IEnumerable<AccountDomain>?> GetByProvinceIds(
             string correlationToken,
             IEnumerable<int> ids,
             CancellationToken token);

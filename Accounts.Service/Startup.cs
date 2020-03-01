@@ -1,5 +1,5 @@
 using Accounts.Api.Extensions;
-using Accounts.Application.UseCases.Extensions;
+using Accounts.Application.Extensions;
 using Accounts.Infrastructure.Extensions;
 using Accounts.Service.Middlewares;
 using CommonLibrary.RedisCache;
@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using StartupExtension = Accounts.Application.UseCases.Extensions.StartupExtension;
+using StartupExtension = Accounts.Application.Extensions.StartupExtension;
 
 namespace Accounts.Service
 {

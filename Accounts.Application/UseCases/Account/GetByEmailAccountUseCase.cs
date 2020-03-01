@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Accounts.Api.App.Queries;
-using Accounts.Api.DataTransferObjects;
+using Accounts.Api.App.Queries.GetByEmail;
 using Accounts.Application.Exceptions;
 using Accounts.Domain.AggregatesModel.Account;
 using Accounts.Domain.AggregatesModel.Address;
@@ -15,7 +14,7 @@ namespace Accounts.Application.UseCases.Account
     public sealed class GetByEmailAccountUseCase
         : IRequestHandler<
             GetByEmailAccountQuery,
-            AccountDto?>
+            GetByEmailAccountDto?>
     {
         private readonly IAccountQueries _accountQueries;
         private readonly IAddressQueries _addressQueries;
@@ -31,7 +30,7 @@ namespace Accounts.Application.UseCases.Account
             _addressQueries = addressQueries;
         }
 
-        public async Task<AccountDto?> Handle(
+        public async Task<GetByEmailAccountDto?> Handle(
             GetByEmailAccountQuery request,
             CancellationToken token)
         {
@@ -48,11 +47,10 @@ namespace Accounts.Application.UseCases.Account
                 accountDomain
                     .AccountStatus,
                 AccountStatusType.AddressVerificationRequired))
-                return new AccountDto(
+                return new GetByEmailAccountDto(
                     accountDomain.Id,
                     (AccountStatusEnum) accountDomain.Id,
                     accountDomain.Email,
-                    accountDomain.ProvinceId,
                     null);
 
             var address = await _addressQueries
@@ -68,12 +66,11 @@ namespace Accounts.Application.UseCases.Account
                     "You can find out the status by ticket: " +
                     $"{request.CorrelationToken}");
 
-            return new AccountDto(
+            return new GetByEmailAccountDto(
                 accountDomain.Id,
                 (AccountStatusEnum) accountDomain.Id,
                 accountDomain.Email,
-                accountDomain.ProvinceId,
-                new AddressDto(
+                new GetByEmailAccountAddressDto(
                     address.CountryId,
                     address.CountryTitle,
                     address.ProvinceId,

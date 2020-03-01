@@ -40,7 +40,7 @@ namespace Accounts.Infrastructure.Repositories
             return entityEntry.Entity;
         }
 
-        public async Task<IEnumerable<AccountDomain>> GetList(
+        public async Task<IEnumerable<AccountDomain>?> GetList(
             string correlationToken,
             int page = 1,
             int amount = 10,
@@ -76,7 +76,7 @@ namespace Accounts.Infrastructure.Repositories
                     token);
         }
 
-        public async Task<IEnumerable<AccountDomain>> GetByProvinceIds(
+        public async Task<IEnumerable<AccountDomain>?> GetByProvinceIds(
             string correlationToken,
             IEnumerable<int> ids,
             CancellationToken token)

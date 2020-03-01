@@ -1,8 +1,8 @@
-﻿namespace Accounts.Api.DataTransferObjects
+﻿namespace Accounts.Api.App.Commands.AccountRegister
 {
-    public sealed class AddressDto
+    public sealed class AccountRegisterAddressDto
     {
-        public AddressDto(
+        public AccountRegisterAddressDto(
             int countryId,
             string countryTitle,
             int provinceId,

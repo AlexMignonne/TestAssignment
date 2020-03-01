@@ -2,10 +2,12 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Accounts.Api.App.Commands;
-using Accounts.Api.App.Queries;
-using Accounts.Api.DataTransferObjects;
+using Accounts.Api.App.Commands.AccountRegister;
+using Accounts.Api.App.Queries.GetByEmail;
+using Accounts.Api.App.Queries.GetListAccount;
 using Accounts.SharedLibrary.ViewModels;
+using Accounts.SharedLibrary.ViewModels.AccountRegister;
+using Accounts.SharedLibrary.ViewModels.GetByEmail;
 using CommonLibrary.RequestInfo;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -34,29 +36,29 @@ namespace Accounts.Api.Controllers
             [FromRoute] string email,
             CancellationToken token = default)
         {
-            var accountDomain = await _mediator
-                .Send<AccountDto>(
+            var dto = await _mediator
+                .Send<GetByEmailAccountDto?>(
                     new GetByEmailAccountQuery(
                         RequestInfo.CorrelationToken,
                         email),
                     token);
 
-            return accountDomain == null
+            return dto == null
                 ? (ActionResult) NotFound()
                 : Ok(
-                    new AccountInfoViewModel
+                    new GetByEmailAccountResponseVM
                     {
-                        AccountStatus = accountDomain
+                        AccountStatus = dto
                             .AccountStatus,
-                        Email = accountDomain.Email,
-                        Address = accountDomain.Address == null
+                        Email = dto.Email,
+                        Address = dto.Address == null
                             ? null
-                            : new AddressViewModel
+                            : new GetByEmailAccountAddressResponseVM()
                             {
-                                CountryId = accountDomain.Address.CountryId,
-                                CountryTitle = accountDomain.Address.CountryTitle,
-                                ProvinceId = accountDomain.Address.ProvinceId,
-                                ProvinceTitle = accountDomain.Address.ProvinceTitle
+                                CountryId = dto.Address.CountryId,
+                                CountryTitle = dto.Address.CountryTitle,
+                                ProvinceId = dto.Address.ProvinceId,
+                                ProvinceTitle = dto.Address.ProvinceTitle
                             }
                     });
         }
@@ -67,23 +69,23 @@ namespace Accounts.Api.Controllers
             [FromQuery] int amount = 10,
             CancellationToken token = default)
         {
-            var accounts = await _mediator
-                .Send<IEnumerable<AccountDto>>(
+            var dtos = await _mediator
+                .Send<IEnumerable<GetListAccountDto>?>(
                     new GetListAccountQuery(
                         RequestInfo.CorrelationToken,
                         page,
                         amount),
                     token);
 
-            var accountDomains = accounts
-                .ToList();
+            var getListAccountDtos = dtos as GetListAccountDto[] 
+                                     ?? dtos.ToArray();
 
-            return !accountDomains.Any()
+            return !getListAccountDtos.Any()
                 ? (ActionResult) NoContent()
                 : Ok(
-                    accountDomains
+                    getListAccountDtos
                         .Select(
-                            _ => new AccountViewModel
+                            _ => new GetListAccountResponseVM
                             {
                                 AccountStatus = _.AccountStatus,
                                 Email = _.Email,
@@ -93,12 +95,12 @@ namespace Accounts.Api.Controllers
 
         [HttpPost]
         public async Task<ActionResult?> Register(
-            [FromBody] AccountRegisterViewModel viewModel,
+            [FromBody] AccountRegisterRequestVM viewModel,
             CancellationToken token = default)
         {
-            var accountDto = await _mediator
-                .Send<AccountDto>(
-                    new RegisterAccountCommand(
+            var dto = await _mediator
+                .Send<AccountRegisterDto?>(
+                    new AccountRegisterCommand(
                         RequestInfo.CorrelationToken,
                         AccountStatusEnum.Active,
                         viewModel.Email,
@@ -107,33 +109,33 @@ namespace Accounts.Api.Controllers
                         viewModel.Agree),
                     token);
 
-            if (accountDto == null)
-                return BadRequest("");
+            if (dto == null)
+                return BadRequest($"Account {viewModel.Email} already registered");
 
             return CreatedAtAction(
                 nameof(GetByEmail),
                 new
                 {
-                    accountDto.Email
+                    dto.Email
                 },
-                new AccountInfoViewModel
+                new AccountRegisterResponseVM
                 {
-                    AccountStatus = accountDto
+                    AccountStatus = dto
                         .AccountStatus,
-                    Email = accountDto
+                    Email = dto
                         .Email,
-                    Address = new AddressViewModel
+                    Address = new AccountRegisterAddressResponseVM
                     {
-                        CountryId = accountDto
+                        CountryId = dto
                             .Address
                             .CountryId,
-                        CountryTitle = accountDto
+                        CountryTitle = dto
                             .Address
                             .CountryTitle,
-                        ProvinceId = accountDto
+                        ProvinceId = dto
                             .Address
                             .ProvinceId,
-                        ProvinceTitle = accountDto
+                        ProvinceTitle = dto
                             .Address
                             .ProvinceTitle
                     }

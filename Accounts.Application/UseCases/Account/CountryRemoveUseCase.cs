@@ -35,6 +35,9 @@ namespace Accounts.Application.UseCases.Account
                     request.ProvinceIds,
                     token);
 
+            if (provinceIds == null)
+                return;
+
             foreach (var accountDomain in provinceIds)
                 accountDomain
                     .ChangeStatus(
